@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bravin's KJSEA Gallery</title>
+<link rel="icon" href="images/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #0E1B2E;
+    --navy-2: #16233A;
+    --navy-3: #1E2E4A;
+    --gold: #F4B942;
+    --coral: #FF6B4A;
+    --paper: #F3EFE4;
+    --paper-dim: #B9BFCC;
+    --green: #3FA66E;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(244,185,66,0.09), transparent 42%),
+      radial-gradient(circle at 88% 92%, rgba(255,107,74,0.08), transparent 42%),
+      var(--navy);
+    font-family:'Inter', sans-serif;
+    color:var(--paper);
+    padding:56px 24px 90px;
+  }
+
+  .top-nav{
+    max-width:1080px;
+    margin:0 auto 24px;
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+
+  .top-nav a{
+    text-decoration:none;
+    color:var(--paper-dim);
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(244,185,66,0.14);
+    padding:10px 14px;
+    border-radius:999px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    transition: all .2s ease;
+  }
+
+  .top-nav a:hover{ color:var(--paper); border-color:rgba(244,185,66,0.4); }
+
+  .wrap{ max-width:1080px; margin:0 auto; }
+
+  header{
+    text-align:center;
+    margin-bottom:56px;
+  }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.32em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:16px;
+    opacity:0;
+    animation: fadeUp .6s ease forwards;
+  }
+
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:clamp(32px, 5.5vw, 52px);
+    line-height:1.05;
+    letter-spacing:-0.01em;
+    margin-bottom:14px;
+    opacity:0;
+    animation: fadeUp .6s ease .1s forwards;
+  }
+  h1 span{ color:var(--gold); }
+
+  header p{
+    color:var(--paper-dim);
+    font-size:15px;
+    max-width:44ch;
+    margin:0 auto;
+    opacity:0;
+    animation: fadeUp .6s ease .2s forwards;
+  }
+
+  .photo-strip{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:22px;
+    margin-bottom:56px;
+  }
+
+  .photo-slot{
+    position:relative;
+    aspect-ratio: 4 / 5;
+    border-radius:12px;
+    overflow:hidden;
+    background: linear-gradient(160deg, var(--navy-2), var(--navy-3));
+    box-shadow: 0 18px 36px -16px rgba(0,0,0,0.5), 0 0 0 1px rgba(244,185,66,0.10);
+    opacity:0;
+    animation: fadeUp .6s ease forwards;
+  }
+  .photo-slot:nth-child(1){ animation-delay:.15s; }
+  .photo-slot:nth-child(2){ animation-delay:.22s; }
+  .photo-slot:nth-child(3){ animation-delay:.29s; }
+
+  .photo-slot img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .photo-slot .slot-label{
+    display:none;
+    position:absolute;
+    inset:0;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:16px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:var(--paper-dim);
+    border:1px dashed rgba(244,185,66,0.35);
+    border-radius:12px;
+  }
+
+  .photo-slot.empty img{ display:none; }
+  .photo-slot.empty .slot-label{ display:flex; }
+  .photo-slot.empty::before{
+    content:"🖼";
+    position:absolute;
+    top:24%;
+    left:0; right:0;
+    text-align:center;
+    font-size:26px;
+    opacity:0.5;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+    gap:34px;
+    padding:0 10px;
+  }
+
+  .card{
+    position:relative;
+    background: linear-gradient(160deg, var(--navy-2), var(--navy-3));
+    border-radius:14px;
+    box-shadow: 0 22px 44px -18px rgba(0,0,0,0.55), 0 0 0 1px rgba(244,185,66,0.10);
+    padding:26px 22px 24px;
+    cursor:pointer;
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+    opacity:0;
+    transform: translateY(20px) rotate(var(--tilt));
+    animation: riseIn .6s cubic-bezier(.2,.8,.2,1) forwards;
+    min-height:230px;
+    display:flex;
+    flex-direction:column;
+  }
+  .card:nth-child(1){ --tilt:-2deg; animation-delay:.25s; }
+  .card:nth-child(2){ --tilt:1.5deg; animation-delay:.35s; }
+  .card:nth-child(3){ --tilt:-1deg;  animation-delay:.45s; }
+  .card:nth-child(4){ --tilt:2deg;   animation-delay:.55s; }
+
+  .card:hover{
+    transform: translateY(-6px) rotate(0deg) scale(1.02);
+    box-shadow: 0 30px 60px -18px rgba(0,0,0,0.65), 0 0 0 1px rgba(244,185,66,0.25);
+  }
+
+  .pin{
+    position:absolute;
+    top:-9px; left:50%;
+    transform:translateX(-50%);
+    width:16px; height:16px;
+    border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #FFDA85, var(--gold));
+    box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+  }
+
+  .card-icon{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:30px;
+    margin-bottom:16px;
+  }
+
+  .card-tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--paper-dim);
+    margin-bottom:8px;
+  }
+
+  .card h3{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:20px;
+    font-weight:700;
+    color:var(--paper);
+    margin-bottom:10px;
+  }
+
+  .card p{
+    font-size:13.5px;
+    line-height:1.55;
+    color:var(--paper-dim);
+    flex:1;
+  }
+
+  .card .open{
+    margin-top:16px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+
+  .card.c1 .card-icon{ color:var(--gold); }
+  .card.c2 .card-icon{ color:var(--coral); }
+  .card.c3 .card-icon{ color:var(--green); }
+  .card.c4 .card-icon{ color:var(--gold); }
+
+  footer{
+    text-align:center;
+    margin-top:60px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--paper-dim);
+    opacity:0;
+    animation: fadeUp .6s ease .7s forwards;
+  }
+  footer b{ color:var(--coral); }
+
+  /* Lightbox */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(6,11,20,0.82);
+    backdrop-filter: blur(4px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .3s ease;
+    z-index:50;
+  }
+  .overlay.active{ opacity:1; pointer-events:auto; }
+
+  .lightbox{
+    max-width:600px;
+    width:100%;
+    max-height:82vh;
+    overflow-y:auto;
+    background: linear-gradient(160deg, var(--navy-2), var(--navy-3));
+    border-radius:16px;
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(244,185,66,0.16);
+    padding:38px 34px;
+    transform: scale(.94) translateY(10px);
+    transition: transform .3s cubic-bezier(.2,.8,.2,1);
+  }
+  .overlay.active .lightbox{ transform: scale(1) translateY(0); }
+
+  .lightbox .card-tag{ color:var(--gold); }
+  .lightbox h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:26px;
+    margin:10px 0 18px;
+    color:var(--paper);
+  }
+  .lightbox .body-text{
+    font-size:15px;
+    line-height:1.75;
+    color:var(--paper-dim);
+  }
+  .lightbox .body-text p{ margin-bottom:14px; }
+  .lightbox .body-text strong{ color:var(--paper); }
+  .lightbox .body-text em{ color:var(--gold); font-style:normal; font-weight:700; }
+
+  .close-btn{
+    display:block;
+    margin:26px auto 0;
+    background:none;
+    border:1px solid rgba(243,239,228,0.25);
+    color:var(--paper-dim);
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    padding:9px 18px;
+    border-radius:999px;
+    cursor:pointer;
+    transition: all .2s ease;
+  }
+  .close-btn:hover{ color:var(--paper); border-color:var(--gold); }
+
+  .quote-item{ margin-bottom:16px; }
+  .quote-item .q{ color:var(--paper); font-style:italic; }
+  .quote-item .a{ color:var(--gold); font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:0.05em; }
+
+  .tip-item{ margin-bottom:14px; }
+  .tip-item .t{ color:var(--paper); font-weight:600; }
+
+  @keyframes riseIn{ to{ opacity:1; transform:translateY(0) rotate(var(--tilt)); } }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:translateY(0);} }
+
+  @media (prefers-reduced-motion: reduce){
+    *, .card, .eyebrow, h1, header p, footer{ animation:none !important; opacity:1 !important; transform:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-nav">
+  <a href="index.html">Home</a>
+  <a href="widget.html">Widget</a>
+  <a href="gallery.html">Gallery</a>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">A COLLECTION · KJSEA 2026</div>
+    <h1>Bravin's Ticket<br><span>to Success</span></h1>
+    <p>Four small things, gathered in one place, all rooting for the same person.</p>
+  </header>
+
+  <div class="photo-strip">
+    <div class="photo-slot">
+      <img src="images/bravin-1.jpeg" alt="Bravin" onerror="this.parentElement.classList.add('empty')">
+      <div class="slot-label">images/bravin-1.jpeg</div>
+    </div>
+    <div class="photo-slot">
+      <img src="images/bravin-2.jpeg" alt="Bravin" onerror="this.parentElement.classList.add('empty')">
+      <div class="slot-label">images/bravin-2.jpeg</div>
+    </div>
+    <div class="photo-slot">
+      <img src="images/bravin-3.jpeg" alt="Bravin" onerror="this.parentElement.classList.add('empty')">
+      <div class="slot-label">images/bravin-3.jpeg</div>
+    </div>
+  </div>
+
+  <div class="grid">
+v    <div class="card c1" data-target="ticket">
+      <div class="pin"></div>
+      <div class="card-icon">🎫</div>
+      <div class="card-tag">Admit One</div>
+      <h3>The Ticket</h3>
+      <p>Candidate: Bravin Kipkorir Mwei. Seat prepared, gate focus, status ready.</p>
+      <div class="open">Open →</div>
+    </div>
+
+    <div class="card c2" data-target="letter">
+      <div class="pin"></div>
+      <div class="card-icon">✉️</div>
+      <div class="card-tag">From Ryan</div>
+      <h3>The Letter</h3>
+      <p>A few honest words before the exam — why the work already done matters most.</p>
+      <div class="open">Open →</div>
+    </div>
+
+    <div class="card c3" data-target="tips">
+      <div class="pin"></div>
+      <div class="card-icon">✅</div>
+      <div class="card-tag">Final Stretch</div>
+      <h3>Study Tips</h3>
+      <p>Seven grounded reminders for the days leading into the exam room.</p>
+      <div class="open">Open →</div>
+    </div>
+
+    <div class="card c4" data-target="quotes">
+      <div class="pin"></div>
+      <div class="card-icon">💬</div>
+      <div class="card-tag">Carry With You</div>
+      <h3>Quotes</h3>
+      <p>Short lines worth remembering when the paper feels heavy.</p>
+      <div class="open">Open →</div>
+    </div>
+  </div>
+
+  <footer>Every candidate gets a seat. <b>Not every candidate is this ready.</b></footer>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="lightbox" id="lightbox-content"></div>
+</div>
+
+<script>
+  const content = {
+    ticket: `
+      <div class="card-tag">Admit One · Candidate</div>
+      <h2>Bravin Kipkorir Mwei</h2>
+      <div class="body-text">
+        <p>Kenya Junior School Education Assessment — 2026 Candidate</p>
+        <p><em>"You've put in the reading, the revision, the early mornings. None of that leaves you when you walk into that room — it's already yours. Answer what you know, breathe through what you don't, and trust the work you've already done."</em></p>
+        <p><strong>Seat:</strong> Prepared &nbsp;·&nbsp; <strong>Gate:</strong> Focus &nbsp;·&nbsp; <strong>Status:</strong> Ready</p>
+        <p>Rooting for you every step — <strong>Ryan</strong></p>
+      </div>
+    `,
+    letter: `
+      <div class="card-tag">A Letter For You</div>
+      <h2>Dear Bravin,</h2>
+      <div class="body-text">
+        <p>I've watched you grow up close, and I want you to hear this from me directly, not just wish it in passing: I believe in you, fully and without hesitation.</p>
+        <p>KJSEA is a big exam, and it's normal to feel the weight of it. But remember that an exam only ever measures a moment — it doesn't measure who you are, how hard you've worked, or what you're capable of. That quiet effort doesn't disappear on exam day. It walks into the room with you.</p>
+        <p>When you sit down with your paper, breathe first. Read each question twice. Start with what you know, and let those marks build your confidence before the harder ones. Time is a tool, not a threat.</p>
+        <p>Whatever the results say, you will still be Bravin — curious, capable, and loved. Go in steady. Come out knowing you gave it everything.</p>
+        <p>With pride and love,<br><strong>Ryan</strong></p>
+      </div>
+    `,
+    tips: `
+      <div class="card-tag">Final Stretch</div>
+      <h2>Study Tips</h2>
+      <div class="body-text">
+        <div class="tip-item"><span class="t">1. Review, don't relearn.</span><br>Revise what you already know rather than cramming new material.</div>
+        <div class="tip-item"><span class="t">2. Practice past papers under timed conditions.</span><br>It trains your pace and shows you where to focus.</div>
+        <div class="tip-item"><span class="t">3. Sleep is part of studying.</span><br>A rested brain remembers and reasons better than a tired one.</div>
+        <div class="tip-item"><span class="t">4. Study in short, focused blocks.</span><br>Try 40–50 minutes on, 10 minutes off.</div>
+        <div class="tip-item"><span class="t">5. Eat and hydrate properly.</span><br>Don't skip breakfast on exam day.</div>
+        <div class="tip-item"><span class="t">6. Prepare the night before.</span><br>Pens, ruler, calculator, admission documents — ready the night before.</div>
+        <div class="tip-item"><span class="t">7. Manage exam-day nerves.</span><br>Slow, deep breaths before you start settle you faster than forcing calm.</div>
+      </div>
+    `,
+    quotes: `
+      <div class="card-tag">Carry With You</div>
+      <h2>Words for the Road</h2>
+      <div class="body-text">
+        <div class="quote-item"><div class="q">"Success is the sum of small efforts, repeated day in and day out."</div><div class="a">— Robert Collier</div></div>
+        <div class="quote-item"><div class="q">"It always seems impossible until it's done."</div><div class="a">— Nelson Mandela</div></div>
+        <div class="quote-item"><div class="q">"Education is the most powerful weapon which you can use to change the world."</div><div class="a">— Nelson Mandela</div></div>
+        <div class="quote-item"><div class="q">"Believe you can and you're halfway there."</div><div class="a">— Theodore Roosevelt</div></div>
+        <div class="quote-item"><div class="q">"The expert in anything was once a beginner."</div><div class="a">— Helen Hayes</div></div>
+        <div class="quote-item"><div class="q">"Push yourself, because no one else is going to do it for you."</div></div>
+        <div class="quote-item"><div class="q">"Hard work beats talent when talent doesn't work hard."</div><div class="a">— Tim Notke</div></div>
+        <p style="margin-top:18px; color:var(--coral); font-weight:700;">Go get it, Bravin. — Ryan</p>
+      </div>
+    `
+  };
+
+  const overlay = document.getElementById('overlay');
+  const lightboxContent = document.getElementById('lightbox-content');
+
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      const key = card.getAttribute('data-target');
+      lightboxContent.innerHTML = content[key] + '<button class="close-btn" id="closeBtn">Close</button>';
+      overlay.classList.add('active');
+      document.getElementById('closeBtn').addEventListener('click', closeLightbox);
+    });
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if(e.target === overlay) closeLightbox();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') closeLightbox();
+  });
+
+  function closeLightbox(){
+    overlay.classList.remove('active');
+  }
+</script>
+
+</body>
+</html>

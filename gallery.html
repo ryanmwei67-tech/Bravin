@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KJSEA 2026 Gallery — Inspire Your Grind</title>
+    <link rel="icon" href="images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #0a0a1a;
+            --bg-secondary: #12122a;
+            --bg-card: #1a1a3e;
+            --bg-card-hover: #222255;
+            --accent-orange: #ff6b35;
+            --accent-cyan: #00e5ff;
+            --accent-purple: #7c4dff;
+            --accent-green: #00e676;
+            --accent-gold: #ffd700;
+            --accent-pink: #ff4081;
+            --accent-red: #ff1744;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0d0;
+            --text-muted: #6a6a9a;
+            --glass: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ===== ANIMATED BACKGROUND ===== */
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+        .bg-orb:nth-child(1) { width: 400px; height: 400px; background: var(--accent-purple); top: -10%; left: -5%; animation-delay: 0s; }
+        .bg-orb:nth-child(2) { width: 350px; height: 350px; background: var(--accent-cyan); top: 20%; right: -5%; animation-delay: -5s; }
+        .bg-orb:nth-child(3) { width: 300px; height: 300px; background: var(--accent-orange); bottom: -5%; left: 30%; animation-delay: -10s; }
+        .bg-orb:nth-child(4) { width: 250px; height: 250px; background: var(--accent-pink); top: 60%; left: -10%; animation-delay: -15s; }
+        .bg-orb:nth-child(5) { width: 200px; height: 200px; background: var(--accent-green); bottom: 20%; right: 10%; animation-delay: -7s; }
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -40px) scale(1.1); }
+            50% { transform: translate(-20px, 30px) scale(0.9); }
+            75% { transform: translate(40px, 20px) scale(1.05); }
+        }
+
+        /* ===== STARS PARTICLES ===== */
+        .stars-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .star {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            opacity: 0;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: var(--max-opacity); transform: scale(1.2); }
+        }
+
+        /* ===== NAVIGATION ===== */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(10, 10, 26, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+        .navbar.scrolled {
+            padding: 10px 24px;
+            background: rgba(10, 10, 26, 0.95);
+        }
+        .nav-brand {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-cyan);
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 0; height: 2px;
+            background: var(--accent-cyan);
+            transition: var(--transition);
+        }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        .hamburger span {
+            display: block;
+            width: 26px; height: 2px;
+            background: var(--text-primary);
+            transition: var(--transition);
+        }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .mobile-menu {
+            position: fixed;
+            top: 0; right: -100%;
+            width: 280px; height: 100vh;
+            background: rgba(10, 10, 26, 0.97);
+            -webkit-backdrop-filter: blur(30px);
+            backdrop-filter: blur(30px);
+            z-index: 999;
+            transition: var(--transition);
+            padding: 80px 30px 30px;
+        }
+        .mobile-menu.active { right: 0; }
+        .mobile-menu a {
+            display: block;
+            padding: 14px 0;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.05rem;
+            border-bottom: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+        .mobile-menu a:hover { color: var(--accent-cyan); padding-left: 10px; }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            z-index: 1;
+            padding: 140px 24px 80px;
+            text-align: center;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            margin-bottom: 24px;
+            animation: fadeInUp 0.8s ease;
+        }
+        .hero-badge .dot {
+            width: 8px; height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .hero h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 20px;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 0 auto 30px;
+            animation: fadeInUp 0.8s ease 0.5s both;
+        }
+        .hero-badge-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            color: var(--text-secondary);
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+        .hero-stat {
+            text-align: center;
+        }
+        .hero-stat .number {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+        }
+        .hero-stat .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* ===== FILTER BAR ===== */
+        .filter-section {
+            position: relative;
+            z-index: 1;
+            padding: 20px 24px 10px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .filter-btn {
+            padding: 10px 22px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            color: var(--text-secondary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: 0.5s;
+        }
+        .filter-btn:hover::before { left: 100%; }
+        .filter-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            transform: translateY(-2px);
+        }
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border-color: transparent;
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(0, 229, 255, 0.3);
+        }
+        .filter-btn .count {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-left: 6px;
+        }
+        .filter-btn.active .count {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* ===== GALLERY GRID ===== */
+        .gallery-container {
+            position: relative;
+            z-index: 1;
+            padding: 30px 24px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .gallery-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .gallery-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .gallery-card.hidden {
+            display: none;
+        }
+        .gallery-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 12px 40px rgba(0, 229, 255, 0.15), 0 0 0 1px rgba(0, 229, 255, 0.1);
+        }
+        .card-visual {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+        .card-visual .gradient-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            transition: var(--transition);
+        }
+        .gallery-card:hover .gradient-bg {
+            transform: scale(1.1);
+        }
+        .gallery-top-spacing { padding-top: 10px; }
+        .card-visual .icon-large {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            opacity: 0.3;
+            filter: blur(1px);
+            transition: var(--transition);
+        }
+        .gallery-card:hover .icon-large {
+            opacity: 0.5;
+            transform: translate(-50%, -50%) scale(1.15);
+        }
+        .card-visual .category-tag {
+            position: absolute;
+            top: 14px; left: 14px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+        .card-visual .favourite-btn {
+            position: absolute;
+            top: 14px; right: 14px;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        .favourite-btn:hover, .favourite-btn.liked {
+            color: var(--accent-pink);
+            background: rgba(255, 64, 129, 0.2);
+            border-color: var(--accent-pink);
+            transform: scale(1.15);
+        }
+        .favourite-btn.liked { animation: heartPop 0.4s ease; }
+        @keyframes heartPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1.15); }
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .card-body h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        .card-body p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px 18px;
+        }
+        .card-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .card-tag {
+            padding: 3px 10px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+        .card-action {
+            padding: 6px 14px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .card-action:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+        }
+
+        /* ===== TALL CARDS (featured) ===== */
+        .gallery-card.tall .card-visual { height: 280px; }
+        .gallery-card.tall .card-body { padding: 24px; }
+        .gallery-card.tall .card-body h3 { font-size: 1.25rem; }
+
+        /* ===== WIDE CARDS ===== */
+        .gallery-card.wide {
+            grid-column: span 2;
+        }
+        .gallery-card.wide .card-visual {
+            height: 200px;
+        }
+        .gallery-card.wide .card-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        .gallery-card.wide .card-visual {
+            grid-column: 1;
+        }
+        .gallery-card.wide .card-content {
+            grid-column: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* ===== MOTIVATIONAL QUOTE CARDS ===== */
+        .quote-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .quote-card.visible { opacity: 1; transform: translateY(0); }
+        .quote-card.hidden { display: none; }
+        .quote-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.1);
+        }
+        .quote-card .quote-mark {
+            position: absolute;
+            top: -10px; left: 10px;
+            font-size: 6rem;
+            opacity: 0.06;
+            font-family: Georgia, serif;
+            color: var(--accent-gold);
+            line-height: 1;
+        }
+        .quote-card blockquote {
+            font-size: 1.05rem;
+            font-style: italic;
+            color: var(--text-primary);
+            line-height: 1.7;
+            margin-bottom: 14px;
+            position: relative;
+            z-index: 1;
+        }
+        .quote-card .author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .quote-card .author-avatar {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .quote-card .author-info .name {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .quote-card .author-info .title {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+        .quote-card .like-count {
+            position: absolute;
+            bottom: 14px; right: 18px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== MILESTONE CARDS ===== */
+        .milestone-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .milestone-card.visible { opacity: 1; transform: translateY(0); }
+        .milestone-card.hidden { display: none; }
+        .milestone-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+        .milestone-icon {
+            width: 56px; height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 14px;
+        }
+        .milestone-card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .milestone-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .milestone-progress {
+            height: 6px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+        .milestone-progress .fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1.5s ease;
+            width: 0;
+        }
+        .milestone-status {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== LIGHTBOX MODAL ===== */
+        .lightbox {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+        }
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .lightbox-content {
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            border: 1px solid var(--glass-border);
+            padding: 0;
+            transform: scale(0.8) translateY(30px);
+            transition: var(--transition);
+        }
+        .lightbox.active .lightbox-content {
+            transform: scale(1) translateY(0);
+        }
+        .lightbox-visual {
+            height: 250px;
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        .lightbox-visual .gradient-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+        }
+        .lightbox-visual .icon-large {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            opacity: 0.25;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 14px; right: 14px;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            z-index: 10;
+        }
+        .lightbox-close:hover {
+            background: var(--accent-red);
+            transform: rotate(90deg);
+        }
+        .lightbox-body {
+            padding: 28px;
+        }
+        .lightbox-body h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .lightbox-body .category-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        .lightbox-body .description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .lightbox-body .tip-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        .lightbox-body .tip-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .lightbox-body .tip-list li .tip-icon {
+            flex-shrink: 0;
+            width: 24px; height: 24px;
+            border-radius: 6px;
+            background: var(--glass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+        .lightbox-nav {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 28px 20px;
+            gap: 12px;
+        }
+        .lightbox-nav button {
+            flex: 1;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            color: var(--text-secondary);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .lightbox-nav button:hover {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            color: #fff;
+            border-color: transparent;
+        }
+
+        /* ===== STATS BAR ===== */
+        .stats-section {
+            position: relative;
+            z-index: 1;
+            padding: 40px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-cyan);
+        }
+        .stat-card .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .stat-card .stat-number {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-card .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        /* ===== SUBJECT SPOTLIGHT ===== */
+        .spotlight-section {
+            position: relative;
+            z-index: 1;
+            padding: 50px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+        .section-header h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .spotlight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .spotlight-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .spotlight-card.visible { opacity: 1; transform: translateY(0); }
+        .spotlight-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow);
+        }
+        .spotlight-header {
+            padding: 20px 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .spotlight-icon {
+            width: 48px; height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+        .spotlight-header h3 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        .spotlight-header .priority {
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .spotlight-body {
+            padding: 16px 20px;
+        }
+        .spotlight-body .tip {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .spotlight-body .tip:last-child { border-bottom: none; }
+        .spotlight-body .tip .num {
+            flex-shrink: 0;
+            width: 22px; height: 22px;
+            border-radius: 6px;
+            background: var(--glass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+        .spotlight-footer {
+            padding: 0 20px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .spotlight-footer .difficulty {
+            display: flex;
+            gap: 3px;
+        }
+        .spotlight-footer .difficulty .dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+        }
+        .spotlight-footer .difficulty .dot.filled {
+            background: var(--accent-orange);
+        }
+        .spotlight-footer .hours {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== BACK TO TOP ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 28px; right: 28px;
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 500;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            box-shadow: 0 4px 20px rgba(0, 229, 255, 0.3);
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .back-to-top:hover {
+            transform: translateY(-3px) scale(1.1);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            position: relative;
+            z-index: 1;
+            padding: 40px 24px 20px;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+        }
+        .footer .brand {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        .footer p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .footer .links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 14px;
+        }
+        .footer .links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.82rem;
+            transition: var(--transition);
+        }
+        .footer .links a:hover { color: var(--accent-cyan); }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .gallery-card.wide { grid-column: span 1; }
+            .gallery-card.wide .card-inner { grid-template-columns: 1fr; }
+            .hero-stats { gap: 20px; }
+            .hero-stat .number { font-size: 1.5rem; }
+            .filter-section { padding: 16px 16px 8px; }
+            .filter-btn { padding: 8px 16px; font-size: 0.78rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .lightbox-content { width: 95%; }
+            .lightbox-visual { height: 180px; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 1.8rem; }
+            .spotlight-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-purple); border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="bg-orb"></div>
+        <div class="bg-orb"></div>
+        <div class="bg-orb"></div>
+        <div class="bg-orb"></div>
+        <div class="bg-orb"></div>
+    </div>
+    <div class="stars-container" id="starsContainer"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="nav-brand">KJSEA 2026</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="gallery.html" class="active">Gallery</a></li>
+            <li><a href="widget.html">Widget</a></li>
+            <li><a href="#quotes">Quotes</a></li>
+            <li><a href="#milestones">Milestones</a></li>
+            <li><a href="#subjects">Subjects</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="widget.html">Widget</a>
+        <a href="#quotes" onclick="closeMobile()">Quotes</a>
+        <a href="#milestones" onclick="closeMobile()">Milestones</a>
+        <a href="#subjects" onclick="closeMobile()">Subjects</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge"><span class="dot"></span> Bravin Kipkorir Mwei • KJSEA 2026</div>
+        <h1><span class="gradient-text">Inspire Your Grind</span></h1>
+        <p>Visual motivation, study wisdom, and milestone badges to keep your fire burning. Every card here is fuel for the exam battle.</p>
+        <div class="hero-badges">
+            <span class="hero-badge-chip">Focused</span>
+            <span class="hero-badge-chip">Ready</span>
+            <span class="hero-badge-chip">Unshaken</span>
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="number" id="cardCount">30</div>
+                <div class="label">Gallery Cards</div>
+            </div>
+            <div class="hero-stat">
+                <div class="number">8</div>
+                <div class="label">Subjects</div>
+            </div>
+            <div class="hero-stat">
+                <div class="number">12</div>
+                <div class="label">Quotes</div>
+            </div>
+            <div class="hero-stat">
+                <div class="number">10</div>
+                <div class="label">Milestones</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter -->
+    <section class="filter-section">
+        <button class="filter-btn active" data-filter="all">All <span class="count" id="allCount">30</span></button>
+        <button class="filter-btn" data-filter="motivation">Motivation <span class="count">8</span></button>
+        <button class="filter-btn" data-filter="study">Study Tips <span class="count">8</span></button>
+        <button class="filter-btn" data-filter="wellness">Wellness <span class="count">4</span></button>
+        <button class="filter-btn" data-filter="strategy">Strategy <span class="count">6</span></button>
+        <button class="filter-btn" data-filter="milestone">Milestones <span class="count">4</span></button>
+    </section>
+
+    <!-- Gallery Grid -->
+    <section class="gallery-container">
+        <div class="gallery-grid" id="galleryGrid"></div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">������da</div>
+                <div class="stat-number">8</div>
+                <div class="stat-label">Subjects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏰</div>
+                <div class="stat-number" id="daysStat">--</div>
+                <div class="stat-label">Days Left</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">������</div>
+                <div class="stat-number">5</div>
+                <div class="stat-label">Study Phases</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-number">10</div>
+                <div class="stat-label">Milestones</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quotes Section -->
+    <section class="gallery-container gallery-top-spacing" id="quotes">
+        <div class="section-header">
+            <h2>������ Words That Hit Different</h2>
+            <p>Quotes to carry you through the late-night study sessions</p>
+        </div>
+        <div class="gallery-grid" id="quotesGrid"></div>
+    </section>
+
+    <!-- Milestones -->
+    <section class="gallery-container gallery-top-spacing" id="milestones">
+        <div class="section-header">
+            <h2>������ Milestone Badges</h2>
+            <p>Unlock these as you progress through your study plan</p>
+        </div>
+        <div class="gallery-grid" id="milestonesGrid"></div>
+    </section>
+
+    <!-- Subject Spotlights -->
+    <section class="spotlight-section" id="subjects">
+        <div class="section-header">
+            <h2>������ Subject Deep-Dives</h2>
+            <p>Key strategies for every KJSEA subject</p>
+        </div>
+        <div class="spotlight-grid" id="spotlightGrid"></div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content" id="lightboxContent"></div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop">↑</button>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="brand">KJSEA 2026</div>
+        <p>Built with fire for the Class of 2026 ✨</p>
+        <div class="links">
+            <a href="index.html">Main Site</a>
+            <a href="gallery.html">Gallery</a>
+            <a href="widget.html">Widget</a>
+        </div>
+    </footer>
+
+<script>
+// ===== DATA =====
+var galleryData = [
+    // MOTIVATION CARDS
+    {
+        id: 1, category: 'motivation',
+        gradient: 'linear-gradient(135deg, #ff6b35, #ff1744)',
+        icon: '������', title: 'Burn the Midnight Oil',
+        desc: 'Those late-night sessions where everything clicks? That is where champions are made.',
+        tags: ['grind', 'night-study'],
+        fullDesc: 'The quiet hours after midnight are not lonely — they are sacred. While the world sleeps, you are forging your future. Every page you read, every problem you solve in those silent hours builds the version of you that will walk into that exam hall unbreakable.',
+        tips: ['Set a consistent night-study schedule (10 PM – 1 AM)', 'Use blue-light filters to protect your eyes', 'Keep water and healthy snacks nearby', 'Take a 5-minute break every 45 minutes']
+    },
+    {
+        id: 2, category: 'motivation',
+        gradient: 'linear-gradient(135deg, #7c4dff, #304ffe)',
+        icon: '������', title: 'You Are Royalty',
+        desc: 'KJSEA is your coronation. Walk in like you own the place — because your preparation earned it.',
+        tags: ['confidence', 'mindset'],
+        fullDesc: 'Confidence is not arrogance — it is the natural result of preparation. When you have put in the hours, done the past papers, and mastered the content, you do not hope for success. You expect it. Carry yourself like royalty because the work you have done deserves that crown.',
+        tips: ['Visualize yourself succeeding before every study session', 'Keep a "win log" — write down every topic you master', 'Dress well on exam day — look the part, feel the part', 'Remind yourself: you have prepared for this']
+    },
+    {
+        id: 3, category: 'motivation',
+        gradient: 'linear-gradient(135deg, #00e676, #00c853)',
+        icon: '������', title: 'Grow Through What You Go Through',
+        desc: 'Every struggle is a lesson. Every failure is fertilizer. You will bloom when it matters.',
+        tags: ['growth', 'resilience'],
+        fullDesc: 'The topics that make you cry today will be the ones you explain to your friends tomorrow. Growth is uncomfortable. If studying feels easy, you are not pushing hard enough. Embrace the struggle — it is sculpting you into the student who will conquer KJSEA.',
+        tips: ['Reframe mistakes: "I do not know YET"', 'After every failed practice test, write 3 things you learned', 'Track your improvement weekly', 'Celebrate small wins along the way']
+    },
+    {
+        id: 4, category: 'motivation',
+        gradient: 'linear-gradient(135deg, #ffd700, #ff6d00)',
+        icon: '������', title: 'Stars Do Not Compete',
+        desc: 'Stop comparing yourself to classmates. Your only competition is who you were yesterday.',
+        tags: ['focus', 'self-belief'],
+        fullDesc: 'The classmate who seems to ace everything? They have their own struggles you never see. Your journey is uniquely yours. The only metric that matters: are you better today than you were last week? If yes, you are already winning.',
+        tips: ['Unfollow social media that makes you feel inferior', 'Set personal goals instead of class rankings', 'Help others — teaching cements your own knowledge', 'Journal your progress weekly']
+    },
+    {
+        id: 5, category: 'motivation',
+        gradient: 'linear-gradient(135deg, #ff4081, #f50057)',
+        icon: '������', title: 'Heart of a Warrior',
+        desc: 'Exams do not test intelligence. They test discipline, consistency, and heart.',
+        tags: ['discipline', 'grit'],
+        fullDesc: 'The smartest student who does not study will lose to the disciplined student who shows up every day. KJSEA rewards consistency, not talent. It rewards the student who does 10 past papers, not the one who skimmed one. Be the warrior, not the genius.',
+        tips: ['Build a non-negotiable daily study routine', 'Do at least 1 past paper section per day', 'Track your study streaks', 'Reward yourself after completing weekly goals']
+    },
+    {
+        id: 6, category: 'motivation',
+        gradient: 'linear-gradient(135deg, #00e5ff, #2979ff)',
+        icon: '⚡', title: 'Lightning Strike Focus',
+        desc: 'Distractions are the enemy. One hour of deep focus beats four hours of half-studying.',
+        tags: ['focus', 'deep-work'],
+        fullDesc: 'Phone on silent. Tabs closed. Door shut. That is the environment where real learning happens. One hour of undistracted, deep-focus study is worth more than an entire afternoon of "studying" while checking Instagram. Guard your attention like it is gold — because it is.',
+        tips: ['Use the Pomodoro technique: 25 min focus, 5 min break', 'Put your phone in another room while studying', 'Use website blockers during study hours', 'Set a timer and race against it']
+    },
+    {
+        id: 7, category: 'motivation',
+        gradient: 'linear-gradient(135deg, #651fff, #aa00ff)',
+        icon: '������', title: 'The Key Is Consistency',
+        desc: 'Small daily improvements are the key to staggering long-term results. 1% better every day.',
+        tags: ['habits', 'consistency'],
+        fullDesc: 'You do not need to study 12 hours a day. You need to study consistently. Two focused hours every day for 60 days will outperform 10-hour cram sessions. The compound effect of daily effort is your most powerful weapon.',
+        tips: ['Start with just 30 minutes if you need to', 'Never miss two days in a row', 'Stack study onto existing habits (after dinner = study)', 'Use a habit tracker to maintain your streak']
+    },
+    {
+        id: 8, category: 'motivation',
+        gradient: 'linear-gradient(135deg, #ff9100, #ff3d00)',
+        icon: '✈️', title: 'Launch Pad',
+        desc: 'KJSEA is not the finish line. It is the launch pad for everything you will become.',
+        tags: ['vision', 'future'],
+        fullDesc: 'Think beyond the exam. KJSEA opens doors to secondary schools, to scholarships, to a future you have dreamed about. Every study session is not just preparation for a test — it is an investment in the life you want. Keep your eyes on the horizon.',
+        tips: ['Write down your "why" and put it on your wall', 'Research the schools you want to get into', 'Talk to people who have succeeded before you', 'Remember: this exam is a stepping stone, not the destination']
+    },
+
+    // STUDY TIP CARDS
+    {
+        id: 9, category: 'study',
+        gradient: 'linear-gradient(135deg, #00b8d4, #0091ea)',
+        icon: '������', title: 'Active Recall Over Rereading',
+        desc: 'Close the book and test yourself. Rereading feels productive but barely sticks.',
+        tags: ['recall', 'technique'],
+        fullDesc: 'The #1 evidence-backed study technique: instead of rereading your notes, close the book and try to recall what you just read. The struggle of retrieving information from memory is what cements it. Use flashcards, practice questions, or simply write everything you remember.',
+        tips: ['After reading a section, close the book and write what you remember', 'Use flashcard apps like Anki for spaced repetition', 'Teach the concept to an imaginary student', 'Do past paper questions immediately after learning a topic']
+    },
+    {
+        id: 10, category: 'study',
+        gradient: 'linear-gradient(135deg, #6200ea, #304ffe)',
+        icon: '������', title: 'Spaced Repetition',
+        desc: 'Review material at increasing intervals. 1 day → 3 days → 7 days → 14 days.',
+        tags: ['memory', 'science'],
+        fullDesc: 'Your brain naturally forgets information over time (Ebbinghaus forgetting curve). Spaced repetition hacks this by reviewing just as you are about to forget. Day 1: learn it. Day 2: review. Day 5: review. Day 12: review. Day 25: you know it permanently.',
+        tips: ['Create a review schedule for each subject', 'Mark topics as Easy/Medium/Hard and review accordingly', 'Use a simple spreadsheet to track review dates', 'Prioritize reviewing older material over learning new stuff']
+    },
+    {
+        id: 11, category: 'study',
+        gradient: 'linear-gradient(135deg, #00c853, #64dd17)',
+        icon: '������', title: 'Past Papers Are Gold',
+        desc: 'KNEC has patterns. Do 5+ past papers per subject and you will see them too.',
+        tags: ['practice', 'exams'],
+        fullDesc: 'Past papers are the closest thing to seeing the exam before you take it. KNEC repeats question styles, tests the same core concepts, and follows predictable patterns. Do a minimum of 5 past papers per subject under timed conditions and you will walk in knowing exactly what to expect.',
+        tips: ['Start with the most recent past papers first', 'Time yourself strictly — simulate real conditions', 'Mark your own work using KNEC marking schemes', 'Keep a "mistake journal" of questions you got wrong']
+    },
+    {
+        id: 12, category: 'study',
+        gradient: 'linear-gradient(135deg, #ff6d00, #ff9100)',
+        icon: '������', title: 'The Feynman Technique',
+        desc: 'If you cannot explain it simply, you do not understand it well enough.',
+        tags: ['understanding', 'method'],
+        fullDesc: 'Named after Nobel physicist Richard Feynman: read a concept, then explain it as if teaching a 10-year-old. Where you stumble or use jargon, that is your gap. Go back, study that specific part, and try again. This technique forces deep understanding instead of surface memorization.',
+        tips: ['Pick a concept and try to explain it aloud in simple words', 'Record yourself explaining and listen back', 'Use analogies from everyday life', 'Study groups: take turns teaching each other topics']
+    },
+    {
+        id: 13, category: 'study',
+        gradient: 'linear-gradient(135deg, #d500f9, #aa00ff)',
+        icon: '������', title: 'Mind Mapping',
+        desc: 'Connect ideas visually. Your brain remembers relationships, not isolated facts.',
+        tags: ['visual', 'organization'],
+        fullDesc: 'Start with a central topic in the middle of a blank page. Branch out with related subtopics, connect them with lines and colors. Mind maps engage both sides of your brain — the logical left and creative right. They make complex topics like Science and Social Studies feel manageable.',
+        tips: ['Use different colors for different branches', 'Keep it to one topic per mind map', 'Draw, do not just write — visuals boost memory', 'Redo mind maps from memory to test recall']
+    },
+    {
+        id: 14, category: 'study',
+        gradient: 'linear-gradient(135deg, #2979ff, #448aff)',
+        icon: '⏱️', title: 'Pomodoro Technique',
+        desc: '25 minutes of focus + 5 minutes of rest. After 4 rounds, take a 20-minute break.',
+        tags: ['time', 'productivity'],
+        fullDesc: 'The Pomodoro Technique breaks study into manageable sprints. Set a timer for 25 minutes and study with zero distractions. When it rings, take a 5-minute break. After 4 rounds (about 2 hours), take a longer 20-30 minute break. This prevents burnout and keeps your brain fresh.',
+        tips: ['Use a physical timer, not your phone', 'During breaks: stretch, hydrate, walk around — no screens', 'Track how many Pomodoros you complete per day', 'Adjust timing: some prefer 50 min focus / 10 min break']
+    },
+    {
+        id: 15, category: 'study',
+        gradient: 'linear-gradient(135deg, #00bfa5, #1de9b6)',
+        icon: '������️', title: 'The SQ3R Method',
+        desc: 'Survey, Question, Read, Recite, Review. The textbook reading system that actually works.',
+        tags: ['reading', 'textbook'],
+        fullDesc: 'SQ3R transforms passive reading into active learning. Survey: skim headings and summaries. Question: turn each heading into a question. Read: find the answers. Recite: say the answers in your own words. Review: summarize the whole section. This method is especially powerful for Social Studies and CRE.',
+        tips: ['Before reading any chapter, spend 5 minutes surveying it', 'Write your questions in the margins', 'After reading, close the book and recite aloud', 'Review your notes within 24 hours']
+    },
+    {
+        id: 16, category: 'study',
+        gradient: 'linear-gradient(135deg, #ff1744, #d50000)',
+        icon: '������', title: 'Mistake Journal',
+        desc: 'Your errors are your greatest teacher. Write them down, analyze them, never repeat them.',
+        tags: ['improvement', 'reflection'],
+        fullDesc: 'Every time you get a question wrong in a past paper or exercise, write it in your Mistake Journal: the question, your wrong answer, the correct answer, and WHY you got it wrong. Over time, patterns emerge. Maybe you always misread questions, or struggle with a specific topic. Your Mistake Journal becomes your personalized revision guide.',
+        tips: ['Use a dedicated notebook for mistakes', 'Categorize errors: "misread", "did not know", "careless", "ran out of time"', 'Review your mistake journal weekly', 'Before the exam, your mistake journal is your #1 revision resource']
+    },
+
+    // WELLNESS CARDS
+    {
+        id: 17, category: 'wellness',
+        gradient: 'linear-gradient(135deg, #00e676, #69f0ae)',
+        icon: '������', title: 'Breathe Like a Pro',
+        desc: '4-7-8 breathing: inhale 4 sec, hold 7 sec, exhale 8 sec. Calms exam anxiety instantly.',
+        tags: ['anxiety', 'calm'],
+        fullDesc: 'When anxiety hits — before, during, or after the exam — your breathing is your remote control for your nervous system. The 4-7-8 technique activates your parasympathetic nervous system, lowering heart rate and clearing your mind. Practice it daily so it becomes automatic on exam day.',
+        tips: ['Practice 4-7-8 breathing every morning for 2 minutes', 'Use it right before entering the exam hall', 'If you panic during the exam, close your eyes and do 3 rounds', 'Combine with positive self-talk: "I am prepared, I am calm"']
+    },
+    {
+        id: 18, category: 'wellness',
+        gradient: 'linear-gradient(135deg, #7c4dff, #b388ff)',
+        icon: '������', title: 'Sleep Is Not Lazy',
+        desc: '7-8 hours of sleep consolidates memory. Studying all night before an exam actually hurts you.',
+        tags: ['sleep', 'recovery'],
+        fullDesc: 'During sleep, your brain replays and consolidates everything you learned that day, moving it from short-term to long-term memory. Cutting sleep to study more is like building a house and skipping the foundation. The walls will collapse. Get 7-8 hours and your study hours will be 3x more effective.',
+        tips: ['Set a strict bedtime — even during exam week', 'No screens 30 minutes before bed', 'Keep your room cool and dark', 'If you cannot sleep, do 4-7-8 breathing or read something light']
+    },
+    {
+        id: 19, category: 'wellness',
+        gradient: 'linear-gradient(135deg, #ff6d00, #ffab40)',
+        icon: '������', title: 'Move Your Body',
+        desc: '20 minutes of exercise boosts brain function for 2-3 hours. Walk, run, stretch — just move.',
+        tags: ['exercise', 'energy'],
+        fullDesc: 'Exercise increases blood flow to the brain, releases BDNF (a protein that helps create new neural connections), and reduces cortisol (stress hormone). A 20-minute walk before studying can make your study session significantly more productive. Movement is not a break from studying — it is part of studying.',
+        tips: ['Walk for 15-20 minutes before your study session', 'Do light stretching between Pomodoro breaks', 'Play a sport 2-3 times per week', 'Even dancing to your favorite song counts — just move!']
+    },
+    {
+        id: 20, category: 'wellness',
+        gradient: 'linear-gradient(135deg, #00b8d4, #84ffff)',
+        icon: '������', title: 'Fuel Your Brain',
+        desc: 'Your brain uses 20% of your calories. Eat well: proteins, omega-3s, fruits, and plenty of water.',
+        tags: ['nutrition', 'brain-food'],
+        fullDesc: 'Studying on empty? Your brain runs on glucose and hydration. Skipping meals or surviving on sugary snacks leads to crashes and brain fog. Eat protein-rich breakfasts (eggs, beans), snack on nuts and fruits, drink at least 2 liters of water daily, and include omega-3 foods (fish, walnuts) for memory support.',
+        tips: ['Never skip breakfast before studying', 'Keep a water bottle at your study desk always', 'Snack on nuts, bananas, and yogurt instead of chips', 'Limit caffeine after 4 PM — it wrecks sleep quality']
+    },
+
+    // STRATEGY CARDS
+    {
+        id: 21, category: 'strategy',
+        gradient: 'linear-gradient(135deg, #ff1744, #ff5252)',
+        icon: '⏰', title: 'Exam Day Time Strategy',
+        desc: 'Read ALL questions first. Start with your strongest. Leave hard ones for last.',
+        tags: ['timing', 'tactics'],
+        fullDesc: 'The moment you get the paper, spend 5 minutes reading every question. Mark easy ones with a star. Attack those first — they build confidence and secure marks. Then tackle medium questions. Leave the hardest for last. Never spend more than the allocated time per question. Move on and come back.',
+        tips: ['Spend first 5 minutes reading the entire paper', 'Mark easy questions and do them first', 'Allocate time per question and stick to it', 'If stuck for 2+ minutes, move on and return later']
+    },
+    {
+        id: 22, category: 'strategy',
+        gradient: 'linear-gradient(135deg, #ffd700, #ffab00)',
+        icon: '������️', title: 'Read the Question Twice',
+        desc: 'KNEC loves trick questions. Underline key words: "NOT", "EXCEPT", "MOST LIKELY", "ALWAYS".',
+        tags: ['reading', 'accuracy'],
+        fullDesc: 'The #1 reason students lose marks is not lack of knowledge — it is misreading questions. KNEC examiners deliberately include distractors and negative wording. Read every question twice. Underline command words (explain, describe, compare) and absolute words (not, except, always, never). These change the entire meaning.',
+        tips: ['Underline key words in every question', 'Pay special attention to "NOT" and "EXCEPT"', 'Identify the command word first: is it asking to list, explain, or describe?', 'Rephrase the question in your head to confirm you understand it']
+    },
+    {
+        id: 23, category: 'strategy',
+        gradient: 'linear-gradient(135deg, #651fff, #7c4dff)',
+        icon: '������', title: 'Answer Structure',
+        desc: 'For essay questions: Introduction + 3 key points + conclusion. Always use paragraphs.',
+        tags: ['writing', 'structure'],
+        fullDesc: 'KNEC rewards structured answers. Whether it is English composition or Social Studies essay, use a clear structure: an introduction that shows you understand the question, 3 well-developed points with examples, and a conclusion that ties everything together. Neat handwriting and proper paragraphing can earn you extra marks.',
+        tips: ['Always plan your answer before writing (2-minute outline)', 'Use PEEL: Point, Evidence, Explanation, Link', 'Write in clear paragraphs — not walls of text', 'For compositions: have a clear beginning, middle, and end']
+    },
+    {
+        id: 24, category: 'strategy',
+        gradient: 'linear-gradient(135deg, #00e5ff, #18ffff)',
+        icon: '������', title: 'Study Plan Strategy',
+        desc: 'Plan backward from exam date. Allocate more time to weak subjects. Track weekly.',
+        tags: ['planning', 'organization'],
+        fullDesc: 'Reverse-engineer your study plan: start from October 26 and work backward. Calculate how many days you have. Allocate more hours to subjects where you score below 60%. Rotate subjects daily to maintain variety. Review your plan every Sunday and adjust based on mock results.',
+        tips: ['Calculate total study hours available until the exam', 'Weight subjects by weakness, not preference', 'Study 2-3 subjects per day for variety', 'Every Sunday: review your week and adjust the plan']
+    },
+    {
+        id: 25, category: 'strategy',
+        gradient: 'linear-gradient(135deg, #1de9b6, #00e676)',
+        icon: '������', title: 'Environment Design',
+        desc: 'Your study space determines your focus. Dedicated desk, good lighting, zero phone.',
+        tags: ['environment', 'setup'],
+        fullDesc: 'Willpower is unreliable — design your environment so studying is the easiest choice. Have a dedicated study space (not your bed). Good lighting reduces eye strain. Keep all materials within arm reach. Remove your phone from the room. A well-designed environment makes 2 hours feel like 1.',
+        tips: ['Study at a desk or table, never on your bed', 'Ensure good lighting — natural light is best', 'Keep textbooks, pens, and water ready before starting', 'Tell your family your study schedule so they respect your time']
+    },
+    {
+        id: 26, category: 'strategy',
+        gradient: 'linear-gradient(135deg, #ff4081, #ff80ab)',
+        icon: '������', title: 'Smart Cramming',
+        desc: 'Cramming is last resort. If you must: focus on high-yield topics, use summaries, no new material.',
+        tags: ['cramming', 'emergency'],
+        fullDesc: 'Ideal? Never cram. Realistic? Sometimes you must. Smart cramming rules: only review material you have studied before — never learn brand-new topics the night before. Focus on high-yield areas (frequently tested topics). Use summaries, mind maps, and flashcards instead of full textbooks. Sleep at least 6 hours.',
+        tips: ['Only review previously studied topics — no new material', 'Focus on high-frequency exam topics', 'Use condensed notes, not full textbooks', 'Stop studying 1 hour before bed and get at least 6 hours sleep']
+    },
+
+    // MILESTONE CARDS (in gallery grid)
+    {
+        id: 27, category: 'milestone',
+        gradient: 'linear-gradient(135deg, #ffd700, #ff6d00)',
+        icon: '������', title: 'Day 1 Warrior',
+        desc: 'Started studying with a plan. Most students never even begin. You did.',
+        tags: ['first-step', 'commitment'],
+        fullDesc: 'The hardest step is the first one. Deciding to prepare seriously, creating a plan, and sitting down for that first study session puts you ahead of the majority. This badge honors the courage to begin.',
+        tips: ['Write your study commitment and sign it', 'Set up your study space today', 'Tell a friend or family member about your plan', 'Start with just 1 hour — momentum builds from there']
+    },
+    {
+        id: 28, category: 'milestone',
+        gradient: 'linear-gradient(135deg, #00e5ff, #2979ff)',
+        icon: '������‍������', title: 'First Past Paper Done',
+        desc: 'Completed your first full past paper under exam conditions. That is real exam simulation.',
+        tags: ['practice', 'simulation'],
+        fullDesc: 'Completing a full past paper under timed conditions is a rite of passage. It simulates the real pressure, time constraints, and question formats. Your first one might be rough, but every subsequent paper gets better.',
+        tips: ['Do it under real exam conditions: timer, no notes, no phone', 'Mark it honestly using the marking scheme', 'Record your score in your progress tracker', 'Identify your weakest topics from the results']
+    },
+    {
+        id: 29, category: 'milestone',
+        gradient: 'linear-gradient(135deg, #7c4dff, #e040fb)',
+        icon: '������', title: '7-Day Study Streak',
+        desc: 'Studied every single day for a week straight. Consistency is your superpower.',
+        tags: ['streak', 'habits'],
+        fullDesc: 'Seven consecutive days of studying builds the habit loop. After a week, studying stops feeling like a chore and starts feeling automatic. This is where discipline transforms into routine, and routine transforms into results.',
+        tips: ['Use a habit tracker app or calendar', 'Even 30 minutes counts on tough days', 'Never break the streak twice', 'Reward yourself at day 7 with something you enjoy']
+    },
+    {
+        id: 30, category: 'milestone',
+        gradient: 'linear-gradient(135deg, #ff1744, #ff5252)',
+        icon: '������', title: 'Exam Ready',
+        desc: 'Completed all past papers, reviewed all weak areas, and feel prepared. You are ready.',
+        tags: ['readiness', 'victory'],
+        fullDesc: 'The ultimate milestone. You have done the past papers, filled the knowledge gaps, practiced under exam conditions, and taken care of your health. When exam morning arrives, you will not be nervous — you will be ready. This badge is earned through weeks of dedication.',
+        tips: ['Do a final review of your mistake journal', 'Pack your exam materials the night before', 'Get a full 8 hours of sleep', 'Walk in with confidence — you have earned it']
+    }
+];
+
+var quotesData = [
+    {
+        quote: 'Education is the most powerful weapon which you can use to change the world.',
+        author: 'Nelson Mandela', title: 'Former President of South Africa',
+        avatar: 'NM', color: '#00e676',
+        likes: 2847
+    },
+    {
+        quote: 'The future belongs to those who believe in the beauty of their dreams.',
+        author: 'Eleanor Roosevelt', title: 'First Lady & Activist',
+        avatar: 'ER', color: '#7c4dff',
+        likes: 2156
+    },
+    {
+        quote: 'It always seems impossible until it is done.',
+        author: 'Nelson Mandela', title: 'Former President of South Africa',
+        avatar: 'NM', color: '#ff6b35',
+        likes: 3421
+    },
+    {
+        quote: 'Success is not final, failure is not fatal: it is the courage to continue that counts.',
+        author: 'Winston Churchill', title: 'Former UK Prime Minister',
+        avatar: 'WC', color: '#ffd700',
+        likes: 1987
+    },
+    {
+        quote: 'The expert in anything was once a beginner.',
+        author: 'Helen Hayes', title: 'Actress & Author',
+        avatar: 'HH', color: '#00e5ff',
+        likes: 1534
+    },
+    {
+        quote: 'Do not wait. The time will never be just right.',
+        author: 'Napoleon Hill', title: 'Author & Motivational Speaker',
+        avatar: 'NH', color: '#ff4081',
+        likes: 1765
+    },
+    {
+        quote: 'Hard work beats talent when talent does not work hard.',
+        author: 'Tim Notke', title: 'Basketball Coach',
+        avatar: 'TN', color: '#ff1744',
+        likes: 4203
+    },
+    {
+        quote: 'A person who never made a mistake never tried anything new.',
+        author: 'Albert Einstein', title: 'Physicist & Nobel Laureate',
+        avatar: 'AE', color: '#304ffe',
+        likes: 2654
+    },
+    {
+        quote: 'You do not have to be great to start, but you have to start to be great.',
+        author: 'Zig Ziglar', title: 'Motivational Speaker',
+        avatar: 'ZZ', color: '#00c853',
+        likes: 3120
+    },
+    {
+        quote: 'The beautiful thing about learning is that no one can take it away from you.',
+        author: 'B.B. King', title: 'Musician & Icon',
+        avatar: 'BK', color: '#d500f9',
+        likes: 1892
+    },
+    {
+        quote: 'Our greatest glory is not in never falling, but in rising every time we fall.',
+        author: 'Confucius', title: 'Philosopher',
+        avatar: 'CO', color: '#ff9100',
+        likes: 2341
+    },
+    {
+        quote: 'If you want to lift yourself up, lift up someone else.',
+        author: 'Booker T. Washington', title: 'Educator & Author',
+        avatar: 'BW', color: '#6200ea',
+        likes: 1445
+    }
+];
+
+var milestonesData = [
+    { icon: '������‍������', title: 'First Week Complete', desc: 'Studied consistently for 7 days straight. The habit is forming.', progress: 100, color: '#00e676', status: 'Unlocked!' },
+    { icon: '������', title: 'Subject Mastered', desc: 'Scored 80%+ on a subject past paper. You own this subject.', progress: 75, color: '#00e5ff', status: '3 of 8 subjects' },
+    { icon: '������', title: 'Mistake Journal: 50 Entries', desc: 'Logged 50 mistakes and learned from every single one.', progress: 60, color: '#7c4dff', status: '30 of 50 entries' },
+    { icon: '������', title: '10 Past Papers Done', desc: 'Completed 10 full past papers under timed conditions.', progress: 40, color: '#ffd700', status: '4 of 10 papers' },
+    { icon: '⭐', title: 'All Subjects Reviewed', desc: 'Completed a full review cycle of every KJSEA subject.', progress: 55, color: '#ff6b35', status: '5 of 8 subjects' },
+    { icon: '������', title: 'Weak Spots Eliminated', desc: 'Turned all weak topics into strong ones through targeted practice.', progress: 35, color: '#ff4081', status: 'In progress' },
+    { icon: '������️', title: 'Mock Exam Conquered', desc: 'Scored above target in a full mock exam under real conditions.', progress: 20, color: '#ff1744', status: 'Coming soon' },
+    { icon: '������', title: '100-Day Streak', desc: 'Studied every single day for 100 days. Legendary consistency.', progress: 15, color: '#ffd700', status: 'Day 15 of 100' },
+    { icon: '������', title: 'Exam Day Ready', desc: 'All milestones complete. You are fully prepared for KJSEA.', progress: 10, color: '#00e676', status: 'Keep pushing!' },
+    { icon: '������', title: 'Results Celebration', desc: 'KJSEA results are out and you crushed it. Time to celebrate!', progress: 0, color: '#7c4dff', status: 'Waiting for exam day' }
+];
+
+var subjectSpotlights = [
+    {
+        name: 'English', icon: '������', color: '#00e5ff',
+        priority: 'HIGH', priorityColor: '#ff1744',
+        difficulty: 4, hours: '4-5 hrs/week',
+        tips: ['Master comprehension: read the passage twice before answering', 'Practice creative writing with a 45-minute timer', 'Learn 20 new vocabulary words per week', 'Review grammar rules: tenses, clauses, reported speech']
+    },
+    {
+        name: 'Kiswahili', icon: '������', color: '#7c4dff',
+        priority: 'HIGH', priorityColor: '#ff1744',
+        difficulty: 4, hours: '4-5 hrs/week',
+        tips: ['Soma insha kwenye gazeti kila wiki', 'Fanya mazoezi ya sarufi: viishi, nyakati, hali', 'Jifunze methali na misemo 10 kila wiki', 'Andika insha moja kila wiki na uombwe msomaji']
+    },
+    {
+        name: 'Mathematics', icon: '������0️', color: '#ff6b35',
+        priority: 'HIGHEST', priorityColor: '#ff1744',
+        difficulty: 5, hours: '6-7 hrs/week',
+        tips: ['Do 20 math problems every single day minimum', 'Master formulas: write them on flashcards', 'Focus on Algebra and Geometry (most tested)', 'Time yourself: 1 minute per mark is the rule']
+    },
+    {
+        name: 'Science', icon: '������', color: '#00e676',
+        priority: 'HIGH', priorityColor: '#ff1744',
+        difficulty: 4, hours: '5-6 hrs/week',
+        tips: ['Draw diagrams for Biology: cells, systems, plants', 'Practice calculations in Physics: speed, force, energy', 'Learn Chemistry equations and balanced reactions', 'Do practical-style questions: observations, inferences']
+    },
+    {
+        name: 'Social Studies', icon: '������️', color: '#ffd700',
+        priority: 'MEDIUM', priorityColor: '#ff9100',
+        difficulty: 3, hours: '3-4 hrs/week',
+        tips: ['Create mind maps for each topic (government, resources, etc)', 'Use the SQ3R method for textbook reading', 'Memorize key dates, names, and places', 'Practice map work and chart interpretation']
+    },
+    {
+        name: 'CRE/IRE', icon: '������', color: '#ff4081',
+        priority: 'MEDIUM', priorityColor: '#ff9100',
+        difficulty: 2, hours: '2-3 hrs/week',
+        tips: ['Know key Bible/Quran stories and their teachings', 'Memorize the 10 Commandments / Pillars of Faith', 'Practice applying teachings to modern life scenarios', 'Review past papers: questions repeat in style']
+    },
+    {
+        name: 'Agriculture', icon: '������', color: '#1de9b6',
+        priority: 'MEDIUM', priorityColor: '#ff9100',
+        difficulty: 3, hours: '2-3 hrs/week',
+        tips: ['Learn the steps of farming practices in order', 'Draw and label diagrams: soil profiles, plant parts', 'Understand the "why" behind farming methods', 'Connect topics: soil + water + crops + markets']
+    },
+    {
+        name: 'Home Science', icon: '������', color: '#ff9100',
+        priority: 'LOW', priorityColor: '#00e676',
+        difficulty: 2, hours: '2-3 hrs/week',
+        tips: ['Focus on nutrition: balanced diet, food groups, deficiencies', 'Practice sewing and laundry techniques theoretically', 'Learn first aid procedures step by step', 'Review childcare and family life topics']
+    }
+];
+
+// ===== RENDER FUNCTIONS =====
+function renderGalleryCards(filter) {
+    var grid = document.getElementById('galleryGrid');
+    grid.innerHTML = '';
+    var filtered = filter === 'all' ? galleryData : galleryData.filter(function(c) { return c.category === filter; });
+    
+    filtered.forEach(function(card, index) {
+        var el = document.createElement('div');
+        el.className = 'gallery-card';
+        el.setAttribute('data-category', card.category);
+        el.setAttribute('data-id', card.id);
+        
+        var categoryColors = {
+            motivation: { bg: 'rgba(255,107,53,0.15)', border: 'rgba(255,107,53,0.5)', text: '#ff6b35' },
+            study: { bg: 'rgba(0,229,255,0.15)', border: 'rgba(0,229,255,0.5)', text: '#00e5ff' },
+            wellness: { bg: 'rgba(0,230,118,0.15)', border: 'rgba(0,230,118,0.5)', text: '#00e676' },
+            strategy: { bg: 'rgba(255,215,0,0.15)', border: 'rgba(255,215,0,0.5)', text: '#ffd700' },
+            milestone: { bg: 'rgba(124,77,255,0.15)', border: 'rgba(124,77,255,0.5)', text: '#7c4dff' }
+        };
+        var cc = categoryColors[card.category];
+        
+        var isLiked = localStorage.getItem('liked_' + card.id) === 'true';
+        
+        el.innerHTML = '<div class="card-visual">' +
+            '<div class="gradient-bg" style="background: ' + card.gradient + ';"></div>' +
+            '<div class="icon-large">' + card.icon + '</div>' +
+            '<span class="category-tag" style="background: ' + cc.bg + '; border: 1px solid ' + cc.border + '; color: ' + cc.text + ';">' + card.category + '</span>' +
+            '<button class="favourite-btn' + (isLiked ? ' liked' : '') + '" onclick="toggleLike(event, ' + card.id + ', this)" title="Like">' + (isLiked ? '❤' : '♡') + '</button>' +
+            '</div>' +
+            '<div class="card-body">' +
+            '<h3>' + card.title + '</h3>' +
+            '<p>' + card.desc + '</p>' +
+            '</div>' +
+            '<div class="card-footer">' +
+            '<div class="card-tags">' + card.tags.map(function(t) { return '<span class="card-tag">' + t + '</span>'; }).join('') + '</div>' +
+            '<button class="card-action" onclick="openLightbox(' + card.id + ')">Explore →</button>' +
+            '</div>';
+        
+        grid.appendChild(el);
+        
+        setTimeout(function() {
+            el.classList.add('visible');
+        }, 80 * index);
+    });
+}
+
+function renderQuotes() {
+    var grid = document.getElementById('quotesGrid');
+    grid.innerHTML = '';
+    
+    quotesData.forEach(function(q, i) {
+        var el = document.createElement('div');
+        el.className = 'quote-card';
+        
+        var isLiked = localStorage.getItem('quote_liked_' + i) === 'true';
+        
+        el.innerHTML = '<div class="quote-mark">“</div>' +
+            '<blockquote>“' + q.quote + '”</blockquote>' +
+            '<div class="author">' +
+            '<div class="author-avatar" style="background: ' + q.color + ';">' + q.avatar + '</div>' +
+            '<div class="author-info"><div class="name">' + q.author + '</div><div class="title">' + q.title + '</div></div>' +
+            '</div>' +
+            '<div class="like-count">' + (isLiked ? '❤' : '♡') + ' ' + (isLiked ? q.likes + 1 : q.likes) + '</div>';
+        
+        el.addEventListener('click', function() {
+            var wasLiked = localStorage.getItem('quote_liked_' + i) === 'true';
+            localStorage.setItem('quote_liked_' + i, wasLiked ? '' : 'true');
+            renderQuotes();
+        });
+        
+        grid.appendChild(el);
+        
+        setTimeout(function() {
+            el.classList.add('visible');
+        }, 60 * i);
+    });
+}
+
+function renderMilestones() {
+    var grid = document.getElementById('milestonesGrid');
+    grid.innerHTML = '';
+    
+    milestonesData.forEach(function(m, i) {
+        var el = document.createElement('div');
+        el.className = 'milestone-card';
+        
+        var difficultyDots = '';
+        for (var d = 0; d < 5; d++) {
+            difficultyDots += '<span class="dot' + (d < Math.ceil(m.progress / 25) ? ' filled' : '') + '"></span>';
+        }
+        
+        el.innerHTML = '<div class="milestone-icon" style="background: ' + m.color + '22;">' + m.icon + '</div>' +
+            '<h3>' + m.title + '</h3>' +
+            '<p>' + m.desc + '</p>' +
+            '<div class="milestone-progress"><div class="fill" style="background: ' + m.color + '; width: ' + m.progress + '%;"></div></div>' +
+            '<div class="milestone-status">' + m.status + '</div>';
+        
+        grid.appendChild(el);
+        
+        setTimeout(function() {
+            el.classList.add('visible');
+            el.querySelector('.fill').classList.add('animated');
+        }, 80 * i);
+    });
+}
+
+function renderSubjectSpotlights() {
+    var grid = document.getElementById('spotlightGrid');
+    grid.innerHTML = '';
+    
+    subjectSpotlights.forEach(function(s, i) {
+        var el = document.createElement('div');
+        el.className = 'spotlight-card';
+        
+        var difficultyDots = '';
+        for (var d = 0; d < 5; d++) {
+            difficultyDots += '<span class="dot' + (d < s.difficulty ? ' filled' : '') + '"></span>';
+        }
+        
+        var tipsHtml = s.tips.map(function(tip, ti) {
+            return '<div class="tip"><span class="num">' + (ti + 1) + '</span><span>' + tip + '</span></div>';
+        }).join('');
+        
+        el.innerHTML = '<div class="spotlight-header">' +
+            '<div class="spotlight-icon" style="background: ' + s.color + '22;">' + s.icon + '</div>' +
+            '<div><h3>' + s.name + '</h3>' +
+            '<span class="priority" style="background: ' + s.priorityColor + '22; color: ' + s.priorityColor + '; border: 1px solid ' + s.priorityColor + '44;">' + s.priority + '</span></div>' +
+            '</div>' +
+            '<div class="spotlight-body">' + tipsHtml + '</div>' +
+            '<div class="spotlight-footer">' +
+            '<div class="difficulty">' + difficultyDots + '</div>' +
+            '<span class="hours">' + s.hours + '</span>' +
+            '</div>';
+        
+        grid.appendChild(el);
+        
+        setTimeout(function() {
+            el.classList.add('visible');
+        }, 80 * i);
+    });
+}
+
+// ===== LIGHTBOX =====
+function openLightbox(id) {
+    var card = galleryData.find(function(c) { return c.id === id; });
+    if (!card) return;
+    
+    var categoryColors = {
+        motivation: { bg: 'rgba(255,107,53,0.2)', text: '#ff6b35' },
+        study: { bg: 'rgba(0,229,255,0.2)', text: '#00e5ff' },
+        wellness: { bg: 'rgba(0,230,118,0.2)', text: '#00e676' },
+        strategy: { bg: 'rgba(255,215,0,0.2)', text: '#ffd700' },
+        milestone: { bg: 'rgba(124,77,255,0.2)', text: '#7c4dff' }
+    };
+    var cc = categoryColors[card.category];
+    
+    var tipsHtml = card.tips.map(function(tip) {
+        return '<li><span class="tip-icon">✓</span><span>' + tip + '</span></li>';
+    }).join('');
+    
+    var content = document.getElementById('lightboxContent');
+    content.innerHTML = '<div class="lightbox-visual">' +
+        '<div class="gradient-bg" style="background: ' + card.gradient + ';"></div>' +
+        '<div class="icon-large">' + card.icon + '</div>' +
+        '<button class="lightbox-close" onclick="closeLightbox()">✕</button>' +
+        '</div>' +
+        '<div class="lightbox-body">' +
+        '<h2>' + card.title + '</h2>' +
+        '<span class="category-badge" style="background: ' + cc.bg + '; color: ' + cc.text + ';">' + card.category + '</span>' +
+        '<div class="description">' + card.fullDesc + '</div>' +
+        '<ul class="tip-list">' + tipsHtml + '</ul>' +
+        '</div>' +
+        '<div class="lightbox-nav">' +
+        '<button onclick="navigateLightbox(' + id + ', -1)">← Previous</button>' +
+        '<button onclick="navigateLightbox(' + id + ', 1)">Next →</button>' +
+        '</div>';
+    
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function navigateLightbox(currentId, direction) {
+    var currentIndex = galleryData.findIndex(function(c) { return c.id === currentId; });
+    var nextIndex = currentIndex + direction;
+    if (nextIndex < 0) nextIndex = galleryData.length - 1;
+    if (nextIndex >= galleryData.length) nextIndex = 0;
+    openLightbox(galleryData[nextIndex].id);
+}
+
+// ===== LIKE SYSTEM =====
+function toggleLike(event, id, btn) {
+    event.stopPropagation();
+    var isLiked = localStorage.getItem('liked_' + id) === 'true';
+    localStorage.setItem('liked_' + id, isLiked ? '' : 'true');
+    
+    if (!isLiked) {
+        btn.classList.add('liked');
+        btn.innerHTML = '❤';
+    } else {
+        btn.classList.remove('liked');
+        btn.innerHTML = '♡';
+    }
+}
+
+// ===== FILTER =====
+document.querySelectorAll('.filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        renderGalleryCards(this.getAttribute('data-filter'));
+    });
+});
+
+// ===== STARS =====
+function createStars() {
+    var container = document.getElementById('starsContainer');
+    for (var i = 0; i < 60; i++) {
+        var star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.setProperty('--duration', (2 + Math.random() * 4) + 's');
+        star.style.setProperty('--max-opacity', (0.3 + Math.random() * 0.5).toString());
+        star.style.animationDelay = (Math.random() * 5) + 's';
+        container.appendChild(star);
+    }
+}
+
+// ===== NAVBAR =====
+function handleNavbar() {
+    var navbar = document.getElementById('navbar');
+    if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
+    }
+}
+
+// ===== MOBILE MENU =====
+document.getElementById('hamburger').addEventListener('click', function() {
+    this.classList.toggle('active');
+    document.getElementById('mobileMenu').classList.toggle('active');
+});
+function closeMobile() {
+    document.getElementById('hamburger').classList.remove('active');
+    document.getElementById('mobileMenu').classList.remove('active');
+}
+
+// ===== BACK TO TOP =====
+function handleBackToTop() {
+    var btn = document.getElementById('backToTop');
+    if (window.scrollY > 500) {
+        btn.classList.add('visible');
+    } else {
+        btn.classList.remove('visible');
+    }
+}
+document.getElementById('backToTop').addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// ===== LIGHTBOX CLOSE ON OUTSIDE CLICK =====
+document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) closeLightbox();
+});
+
+// ===== KEYBOARD =====
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+    if (document.getElementById('lightbox').classList.contains('active')) {
+        var currentCard = document.querySelector('.lightbox-body h2');
+        if (currentCard) {
+            var title = currentCard.textContent;
+            var card = galleryData.find(function(c) { return c.title === title; });
+            if (card) {
+                if (e.key === 'ArrowLeft') navigateLightbox(card.id, -1);
+                if (e.key === 'ArrowRight') navigateLightbox(card.id, 1);
+            }
+        }
+    }
+});
+
+// ===== COUNTDOWN =====
+function updateCountdown() {
+    var examStart = new Date('2026-10-26T08:00:00+03:00');
+    var now = new Date();
+    var diff = examStart - now;
+    var days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    var daysEl = document.getElementById('daysStat');
+    if (daysEl) daysEl.textContent = Math.max(0, days);
+}
+
+// ===== SCROLL REVEAL =====
+function setupScrollReveal() {
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    
+    document.querySelectorAll('.spotlight-card, .stat-card').forEach(function(el) {
+        observer.observe(el);
+    });
+}
+
+// ===== INIT =====
+window.addEventListener('scroll', function() {
+    handleNavbar();
+    handleBackToTop();
+});
+
+createStars();
+renderGalleryCards('all');
+renderQuotes();
+renderMilestones();
+renderSubjectSpotlights();
+setupScrollReveal();
+updateCountdown();
+setInterval(updateCountdown, 60000);
+</script>
+</body>
+</html>

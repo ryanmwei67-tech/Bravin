@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>KJSEA 2026 Widget</title>
+    <link rel="icon" href="images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #6C63FF; --accent: #FF6584; --dark: #1a1a2e;
+            --teal: #4ECDC4; --green: #44BD32;
+            --glass: rgba(255,255,255,0.08); --glass-border: rgba(255,255,255,0.12);
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark);
+            color: #fff;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            gap: 0.8rem;
+            overflow-y: auto;
+        }
+
+        .page-links {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.2rem;
+        }
+
+        .page-links a {
+            text-decoration: none;
+            color: rgba(255,255,255,0.8);
+            border: 1px solid rgba(255,255,255,0.12);
+            background: linear-gradient(135deg, rgba(108,99,255,0.12), rgba(255,101,132,0.08));
+            border-radius: 999px;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: 0.2s ease;
+        }
+
+        .page-links a:hover {
+            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Countdown Card */
+        .countdown-card {
+            background: linear-gradient(135deg, rgba(108,99,255,0.25), rgba(255,101,132,0.15));
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .countdown-card .cc-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 0.5rem;
+        }
+        .countdown-card .cc-exam-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .countdown-card .cc-dates {
+            font-size: 0.7rem;
+            color: var(--teal);
+            font-family: 'Space Mono', monospace;
+            margin-bottom: 1rem;
+        }
+        .mini-countdown {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+        .mc-block {
+            background: rgba(0,0,0,0.35);
+            border-radius: 14px;
+            padding: 0.7rem 0.3rem;
+            text-align: center;
+        }
+        .mc-block .mc-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(108,99,255,0.4);
+        }
+        .mc-block .mc-unit {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.35);
+            margin-top: 0.3rem;
+        }
+
+        /* Progress */
+        .progress-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 1rem 1.2rem;
+        }
+        .progress-card .pc-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.45);
+            margin-bottom: 0.4rem;
+        }
+        .progress-card .pc-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-card .pc-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        /* Today's Schedule */
+        .schedule-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 1rem 1.2rem;
+        }
+        .schedule-card .sc-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .schedule-item:last-child { border-bottom: none; }
+        .schedule-item .si-icon { font-size: 1rem; }
+        .schedule-item .si-name { font-size: 0.8rem; font-weight: 500; flex: 1; }
+        .schedule-item .si-time {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--teal);
+            background: rgba(78,205,196,0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 8px;
+        }
+
+        /* Quote */
+        .quote-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 1rem 1.2rem;
+            text-align: center;
+        }
+        .quote-card .qt-text {
+            font-size: 0.85rem;
+            font-style: italic;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.5;
+            transition: opacity 0.5s;
+        }
+        .quote-card .qt-author {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.3);
+            margin-top: 0.4rem;
+        }
+
+        /* Exam Active/Done */
+        .exam-active, .exam-done { display: none; border-radius: 18px; padding: 1rem; text-align: center; animation: glow 2s ease-in-out infinite; }
+        .exam-active { background: linear-gradient(135deg, var(--primary), var(--accent)); }
+        .exam-done { background: linear-gradient(135deg, var(--teal), var(--green)); }
+        .exam-active h3, .exam-done h3 { font-size: 1.1rem; font-weight: 700; }
+        .exam-active p, .exam-done p { font-size: 0.8rem; opacity: 0.9; }
+        @keyframes glow { 0%,100%{box-shadow:0 0 15px rgba(108,99,255,0.2)} 50%{box-shadow:0 0 30px rgba(108,99,255,0.5)} }
+
+        /* Quick Tips */
+        .tips-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 1rem 1.2rem;
+        }
+        .tips-card .tc-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+        }
+        .tips-card .tc-tip {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+            padding: 0.3rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        .tips-card .tc-tip:last-child { border-bottom: none; }
+
+        .footer {
+            text-align: center;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.15);
+            margin-top: auto;
+            padding-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-links">
+        <a href="index.html">Home</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="widget.html">Widget</a>
+    </div>
+
+    <div class="countdown-card">
+        <div class="cc-title">Countdown</div>
+        <div class="cc-exam-name">KJSEA 2026</div>
+        <div class="cc-dates">26 Oct → 30 Oct 2026</div>
+        <div class="mini-countdown">
+            <div class="mc-block"><div class="mc-num" id="days">--</div><div class="mc-unit">Days</div></div>
+            <div class="mc-block"><div class="mc-num" id="hours">--</div><div class="mc-unit">Hours</div></div>
+            <div class="mc-block"><div class="mc-num" id="minutes">--</div><div class="mc-unit">Min</div></div>
+            <div class="mc-block"><div class="mc-num" id="seconds">--</div><div class="mc-unit">Sec</div></div>
+        </div>
+    </div>
+
+    <div class="exam-active" id="examActive"><h3>📝 Exams In Progress!</h3><p>Stay focused. You've got this!</p></div>
+    <div class="exam-done" id="examDone"><h3>🎉 Exams Complete!</h3><p>Well done! Time to celebrate.</p></div>
+
+    <div class="progress-card">
+        <div class="pc-label"><span>Prep Progress</span><span id="pct">0%</span></div>
+        <div class="pc-bar"><div class="pc-fill" id="fill"></div></div>
+    </div>
+
+    <div class="schedule-card">
+        <div class="sc-title">📅 Today's Focus</div>
+        <div class="schedule-item"><span class="si-icon">📐</span><span class="si-name">Mathematics</span><span class="si-time">2 hrs</span></div>
+        <div class="schedule-item"><span class="si-icon">📖</span><span class="si-name">English</span><span class="si-time">1.5 hrs</span></div>
+        <div class="schedule-item"><span class="si-icon">🔬</span><span class="si-name">Science</span><span class="si-time">1.5 hrs</span></div>
+        <div class="schedule-item"><span class="si-icon">🌍</span><span class="si-name">Social Studies</span><span class="si-time">1 hr</span></div>
+    </div>
+
+    <div class="quote-card">
+        <div class="qt-text" id="qt">Loading...</div>
+        <div class="qt-author" id="qa"></div>
+    </div>
+
+    <div class="tips-card">
+        <div class="tc-title">💡 Quick Study Tip</div>
+        <div class="tc-tip" id="tip">Study 25 min → Break 5 min → Repeat (Pomodoro)</div>
+    </div>
+
+    <div class="footer">🇰🇪 KJSEA 2026 — Built with ❤️</div>
+
+    <script>
+        const EXAM_START = new Date('2026-10-26T00:00:00');
+        const EXAM_END = new Date('2026-10-30T23:59:59');
+        const PREP_START = new Date('2025-08-26T00:00:00');
+
+        const quotes = [
+            {t:"Success is not final, failure is not fatal: it is the courage to continue that counts.",a:"Winston Churchill"},
+            {t:"The expert in anything was once a beginner.",a:"Helen Hayes"},
+            {t:"Education is the most powerful weapon which you can use to change the world.",a:"Nelson Mandela"},
+            {t:"It always seems impossible until it's done.",a:"Nelson Mandela"},
+            {t:"Believe you can and you're halfway there.",a:"Theodore Roosevelt"},
+            {t:"You don't have to be great to start, but you have to start to be great.",a:"Zig Ziglar"},
+            {t:"Discipline is choosing between what you want now and what you want most.",a:"Abraham Lincoln"},
+            {t:"The beautiful thing about learning is that nobody can take it away from you.",a:"B.B. King"},
+        ];
+
+        const tips = [
+            "Study 25 min → Break 5 min → Repeat (Pomodoro)",
+            "Review material at increasing intervals (1→3→7 days)",
+            "Test yourself BEFORE looking at notes (Active Recall)",
+            "Sleep 8+ hrs — your brain locks in memories while you rest",
+            "Put your phone away during study — even seeing it reduces focus",
+            "Tackle your hardest subject first when energy is highest",
+            "Teach a concept to someone — if they get it, you own it",
+            "Eat eggs, nuts, fish — brain food, not sugar crashes",
+            "Track your practice test scores weekly — watch yourself improve",
+            "Breathe: in 4s → hold 4s → out 6s before exams",
+        ];
+
+        function pad(n) { return String(n).padStart(2,'0'); }
+
+        function update() {
+            const now = new Date();
+            if (now >= EXAM_END) {
+                document.getElementById('examDone').style.display = 'block';
+                document.getElementById('examActive').style.display = 'none';
+                return;
+            }
+            let target = (now >= EXAM_START && now < EXAM_END) ? EXAM_END : EXAM_START;
+            if (now >= EXAM_START) document.getElementById('examActive').style.display = 'block';
+            const diff = target - now;
+            document.getElementById('days').textContent = pad(Math.floor(diff/(1000*60*60*24)));
+            document.getElementById('hours').textContent = pad(Math.floor((diff%(1000*60*60*24))/(1000*60*60)));
+            document.getElementById('minutes').textContent = pad(Math.floor((diff%(1000*60*60))/(1000*60)));
+            document.getElementById('seconds').textContent = pad(Math.floor((diff%(1000*60))/1000));
+
+            let pct;
+            if (now >= EXAM_START) { pct = Math.min(100, Math.round(((now-EXAM_START)/(EXAM_END-EXAM_START))*100)); }
+            else { pct = Math.min(100, Math.max(0, Math.round(((now-PREP_START)/(EXAM_START-PREP_START))*100))); }
+            document.getElementById('fill').style.width = pct+'%';
+            document.getElementById('pct').textContent = pct+'%';
+        }
+        update();
+        setInterval(update, 1000);
+
+        // Quotes
+        let qi = Math.floor(Math.random()*quotes.length);
+        function rotateQuote() {
+            const q = quotes[qi];
+            const qt = document.getElementById('qt');
+            const qa = document.getElementById('qa');
+            qt.style.opacity = 0;
+            setTimeout(() => { qt.textContent = '"'+q.t+'"'; qa.textContent = '— '+q.a; qt.style.opacity = 1; qa.style.opacity = 1; }, 300);
+            qi = (qi+1) % quotes.length;
+        }
+        rotateQuote();
+        setInterval(rotateQuote, 12000);
+
+        // Tips
+        let ti = Math.floor(Math.random()*tips.length);
+        function rotateTip() {
+            document.getElementById('tip').style.opacity = 0;
+            setTimeout(() => { document.getElementById('tip').textContent = tips[ti]; document.getElementById('tip').style.opacity = 1; }, 300);
+            ti = (ti+1) % tips.length;
+        }
+        setInterval(rotateTip, 20000);
+
+        // Style transitions
+        document.getElementById('qt').style.transition = 'opacity 0.3s';
+        document.getElementById('qa').style.transition = 'opacity 0.3s';
+        document.getElementById('tip').style.transition = 'opacity 0.3s';
+    </script>
+</body>
+</html>
