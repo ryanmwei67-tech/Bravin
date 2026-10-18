@@ -178,9 +178,12 @@
             const msg = document.getElementById('message');
 
             if (u === CORRECT_USER && p === CORRECT_PASS) {
+                // set login flag and do a reliable redirect
+                try { localStorage.setItem('bravin_logged_in', '1'); } catch (err) { /* ignore */ }
                 msg.style.color = '#a7f3d0';
                 msg.textContent = 'Login successful — Redirecting...';
-                setTimeout(() => { window.location.href = 'home.html'; }, 900);
+                // use replace so history doesn't keep the login URL
+                window.location.replace('home.html');
             } else {
                 msg.style.color = '#ffb3b3';
                 msg.textContent = 'Invalid username or password.';
