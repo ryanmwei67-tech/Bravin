@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Bravin — Login</title>
+    <link rel="icon" href="images/favicon.ico">
+    <style>
+        :root{--bg:#0f1724;--card:#0b1220;--accent:#6C63FF;--muted:#9aa4c0;--glass:rgba(255,255,255,0.03)}
+        *{box-sizing:border-box}
+        body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:linear-gradient(180deg,var(--bg),#071027);min-height:100vh;display:flex;align-items:center;justify-content:center;color:#e6eef8}
+        .wrap{width:100%;max-width:420px;padding:28px}
+        .card{background:linear-gradient(180deg,var(--card),rgba(11,18,32,0.92));border-radius:12px;padding:28px;border:1px solid var(--glass);box-shadow:0 10px 30px rgba(2,6,23,0.7)}
+        h1{font-size:20px;margin:0 0 6px}
+        p.lead{margin:0 0 18px;color:var(--muted);font-size:13px}
+        .field{margin-bottom:12px}
+        label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+        input[type=text],input[type=password]{width:100%;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:#fff;font-size:14px}
+        .btn{width:100%;padding:10px 12px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-weight:600;cursor:pointer;margin-top:8px}
+        .hint{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;color:var(--muted);font-size:13px;margin-top:12px;border:1px solid rgba(255,255,255,0.02)}
+        .countdown{display:flex;gap:10px;justify-content:center;margin-top:18px}
+        .cd-item{background:rgba(255,255,255,0.03);padding:8px 12px;border-radius:8px;text-align:center;min-width:68px}
+        .cd-num{font-family:monospace;font-size:18px;font-weight:700}
+        .cd-label{font-size:11px;color:var(--muted);margin-top:6px}
+        .msg{margin-top:12px;font-size:13px}
+        .footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+        a.home-link{color:var(--accent);text-decoration:none;font-weight:600}
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="card" role="main">
+            <h1>Welcome to Bravin</h1>
+            <p class="lead">Please sign in to continue to the study hub.</p>
+
+            <form id="loginForm" onsubmit="return handleLogin(event)">
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input id="username" type="text" autocomplete="username" placeholder="Enter username" />
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" autocomplete="current-password" placeholder="Enter password" />
+                </div>
+                <button class="btn" type="submit">Sign In</button>
+            </form>
+
+            <div class="hint">
+                Demo credentials — username: <strong>Bravin</strong> &middot; password: <strong>KJSEA@2026</strong>
+                <div style="margin-top:8px;font-size:12px;color:var(--muted)">Successful login will navigate to the main site (home.html).</div>
+            </div>
+
+            <div class="countdown" aria-live="polite" aria-atomic="true" id="countdown">
+                <div class="cd-item"><div class="cd-num" id="cd-days">--</div><div class="cd-label">Days</div></div>
+                <div class="cd-item"><div class="cd-num" id="cd-hours">--</div><div class="cd-label">Hours</div></div>
+                <div class="cd-item"><div class="cd-num" id="cd-mins">--</div><div class="cd-label">Minutes</div></div>
+                <div class="cd-item"><div class="cd-num" id="cd-secs">--</div><div class="cd-label">Seconds</div></div>
+            </div>
+
+            <div class="msg" id="message"></div>
+
+            <div class="footer">Or open the site directly: <a class="home-link" href="home.html">Home Page</a></div>
+        </div>
+    </div>
+
+    <script>
+        // Credentials requested by the user
+        const CORRECT_USER = 'Bravin';
+        const CORRECT_PASS = 'KJSEA@2026';
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('username').value.trim();
+            const p = document.getElementById('password').value;
+            const msg = document.getElementById('message');
+            if (u === CORRECT_USER && p === CORRECT_PASS) {
+                msg.style.color = '#a7f3d0';
+                msg.textContent = 'Login successful — Redirecting...';
+                setTimeout(() => { window.location.href = 'home.html'; }, 900);
+            } else {
+                msg.style.color = '#ffb3b3';
+                msg.textContent = 'Invalid username or password.';
+            }
+            return false;
+        }
+
+        // Countdown to 1 January 2027
+        const target = new Date('2027-01-01T00:00:00');
+        function pad(n){return String(n).padStart(2,'0')}
+        function updateCountdown(){
+            const now = new Date();
+            let diff = Math.max(0, target - now);
+            const days = Math.floor(diff / (1000*60*60*24));
+            diff -= days * (1000*60*60*24);
+            const hours = Math.floor(diff / (1000*60*60));
+            diff -= hours * (1000*60*60);
+            const mins = Math.floor(diff / (1000*60));
+            diff -= mins * (1000*60);
+            const secs = Math.floor(diff / 1000);
+            document.getElementById('cd-days').textContent = days;
+            document.getElementById('cd-hours').textContent = pad(hours);
+            document.getElementById('cd-mins').textContent = pad(mins);
+            document.getElementById('cd-secs').textContent = pad(secs);
+        }
+        updateCountdown();
+        setInterval(updateCountdown,1000);
+
+        // Allow pressing Enter to submit when focused on password
+        document.getElementById('password').addEventListener('keyup', function(e){ if(e.key === 'Enter') document.getElementById('loginForm').dispatchEvent(new Event('submit')) });
+    </script>
+</body>
+</html>
