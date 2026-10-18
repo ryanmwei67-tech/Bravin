@@ -1,650 +1,219 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KJSEA 2026 — National Exams Countdown & Study Hub</title>
+    <title>Bravin — Login</title>
     <link rel="icon" href="images/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #6C63FF; --accent: #FF6584; --dark: #1a1a2e; --darker: #16213e;
-            --light: #eaf0fb; --teal: #4ECDC4; --green: #44BD32; --orange: #FF9F43;
-            --purple: #A66CFF; --glass: rgba(255,255,255,0.08); --glass-border: rgba(255,255,255,0.12);
-            --glass-hover: rgba(255,255,255,0.14);
+            --bg: #0f1724;
+            --card: #0b1220;
+            --accent: #6C63FF;
+            --muted: #9aa4c0;
+            --text: #e6eef8;
+            --glass: rgba(255,255,255,0.03);
+            --error: #ffb3b3;
+            --success: #a7f3d0;
         }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Poppins', sans-serif; background: var(--dark); color: var(--light); overflow-x: hidden; }
-
-        /* NAV */
-        nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            background: rgba(26,26,46,0.85); backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border); padding: 0.8rem 1.5rem;
-            display: flex; align-items: center; justify-content: space-between;
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, var(--bg), #071027);
+            color: var(--text);
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
         }
-        nav .logo { font-weight: 700; font-size: 1.1rem; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        nav .nav-links { display: flex; gap: 1.5rem; list-style: none; }
-        nav .nav-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color 0.3s; letter-spacing: 0.5px; }
-        nav .nav-links a:hover { color: #fff; }
-        .nav-links .page-link { padding: 0.2rem 0.55rem; border-radius: 999px; border: 1px solid rgba(255,255,255,0.08); }
-        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
-        .hamburger span { width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: 0.3s; }
-        .mobile-menu { display: none; position: fixed; top: 55px; left: 0; right: 0; background: rgba(26,26,46,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); padding: 1rem; z-index: 99; }
-        .mobile-menu a { display: block; color: rgba(255,255,255,0.7); text-decoration: none; padding: 0.8rem 1rem; font-size: 0.95rem; border-bottom: 1px solid var(--glass-border); }
-        @media (max-width: 768px) { .hamburger { display: flex; } nav .nav-links { display: none; } .mobile-menu.open { display: block; } }
-
-        /* BG */
-        .bg-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; pointer-events: none; }
-        .bg-animation .orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.3; animation: floatOrb 10s ease-in-out infinite; }
-        .orb:nth-child(1) { width: 500px; height: 500px; background: var(--primary); top: -150px; left: -150px; }
-        .orb:nth-child(2) { width: 400px; height: 400px; background: var(--accent); bottom: -100px; right: -100px; animation-delay: -4s; }
-        .orb:nth-child(3) { width: 350px; height: 350px; background: var(--teal); top: 40%; left: 55%; animation-delay: -7s; }
-        .orb:nth-child(4) { width: 250px; height: 250px; background: var(--purple); top: 80%; left: 10%; animation-delay: -2s; }
-        @keyframes floatOrb { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-40px) scale(1.06)} 66%{transform:translate(-30px,30px) scale(0.94)} }
-
-        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
-        .particle { position: absolute; background: rgba(255,255,255,0.4); border-radius: 50%; animation: rise linear infinite; }
-        @keyframes rise { 0%{transform:translateY(100vh) scale(0);opacity:0} 10%{opacity:0.6} 90%{opacity:0.6} 100%{transform:translateY(-10vh) scale(1);opacity:0} }
-
-        /* SECTIONS */
-        .container { position: relative; z-index: 2; }
-        section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
-        .section-divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 3px; margin: 0 auto 1.5rem; }
-        .section-title { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; text-align: center; margin-bottom: 0.5rem; }
-        .section-subtitle { font-size: 1rem; text-align: center; color: rgba(255,255,255,0.5); margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto; }
-
-        /* HERO */
-        #hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 4rem; }
-        .exam-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50px; padding: 0.5rem 1.5rem; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1.5rem; backdrop-filter: blur(10px); }
-        .exam-badge .dot { width: 8px; height: 8px; background: var(--teal); border-radius: 50%; animation: pulseDot 2s ease-in-out infinite; }
-        @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.4)} }
-        .main-title { font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 900; text-align: center; line-height: 1.05; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .subtitle { font-size: clamp(1rem, 2.5vw, 1.4rem); font-weight: 300; text-align: center; color: rgba(255,255,255,0.6); margin-bottom: 2rem; }
-        .exam-dates { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; justify-content: center; }
-        .date-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1rem 1.5rem; text-align: center; backdrop-filter: blur(10px); min-width: 160px; }
-        .date-card .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.4); margin-bottom: 0.3rem; }
-        .date-card .date { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--teal); }
-        .date-separator { font-size: 1.5rem; color: rgba(255,255,255,0.3); }
-
-        /* COUNTDOWN */
-        .countdown-label { text-align: center; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 3px; color: rgba(255,255,255,0.4); margin-bottom: 1.5rem; }
-        .countdown { display: flex; gap: clamp(0.8rem, 2.5vw, 2rem); justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
-        .countdown-item { display: flex; flex-direction: column; align-items: center; }
-        .countdown-item .number-container { width: clamp(80px, 16vw, 140px); height: clamp(80px, 16vw, 140px); background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(15px); position: relative; overflow: hidden; }
-        .countdown-item .number-container::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(255,255,255,0.05); }
-        .countdown-item .number { font-family: 'Space Mono', monospace; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; color: #fff; text-shadow: 0 0 25px rgba(108,99,255,0.5); }
-        .countdown-item .number.flip { animation: flipNum 0.5s ease; }
-        @keyframes flipNum { 0%{transform:translateY(-10px);opacity:0} 100%{transform:translateY(0);opacity:1} }
-        .countdown-item .unit { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; color: rgba(255,255,255,0.45); margin-top: 0.8rem; }
-
-        /* BANNERS */
-        .exam-active-banner, .exam-done-banner { display: none; padding: 1.2rem 2rem; border-radius: 16px; text-align: center; margin-bottom: 2rem; animation: glowBanner 2s ease-in-out infinite; }
-        .exam-active-banner { background: linear-gradient(135deg, var(--primary), var(--accent)); }
-        .exam-done-banner { background: linear-gradient(135deg, var(--teal), var(--green)); }
-        .exam-active-banner h2, .exam-done-banner h2 { font-size: 1.5rem; font-weight: 700; }
-        .exam-active-banner p, .exam-done-banner p { font-size: 0.95rem; opacity: 0.9; }
-        @keyframes glowBanner { 0%,100%{box-shadow:0 0 20px rgba(108,99,255,0.2)} 50%{box-shadow:0 0 50px rgba(108,99,255,0.5)} }
-
-        /* PROGRESS */
-        .progress-section { width: 100%; max-width: 600px; margin-bottom: 2rem; }
-        .progress-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: rgba(255,255,255,0.45); margin-bottom: 0.5rem; }
-        .progress-bar-outer { width: 100%; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
-        .progress-bar-inner { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 3px; transition: width 1s ease; position: relative; }
-        .progress-bar-inner::after { content: ''; position: absolute; right: 0; top: -3px; width: 12px; height: 12px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 15px var(--accent); }
-
-        /* QUOTE */
-        .quote-section { max-width: 500px; text-align: center; margin-bottom: 1.5rem; }
-        .quote-text { font-size: 1.05rem; font-weight: 300; font-style: italic; color: rgba(255,255,255,0.55); line-height: 1.6; transition: opacity 0.5s ease; }
-        .quote-author { font-size: 0.8rem; color: rgba(255,255,255,0.3); margin-top: 0.5rem; transition: opacity 0.5s ease; }
-
-        /* SCHEDULE */
-        #schedule { padding-top: 6rem; }
-        .schedule-phase { margin-bottom: 3rem; }
-        .phase-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
-        .phase-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
-        .phase-cyan { background: rgba(78,205,196,0.15); }
-        .phase-green { background: rgba(68,189,50,0.15); }
-        .phase-orange { background: rgba(255,159,67,0.15); }
-        .phase-purple { background: rgba(166,108,255,0.15); }
-        .phase-pink { background: rgba(255,101,132,0.15); }
-        .phase-header-text h3 { font-size: 1.3rem; font-weight: 600; }
-        .phase-header-text .phase-dates { font-size: 0.8rem; color: rgba(255,255,255,0.4); font-family: 'Space Mono', monospace; }
-        .phase-tag { font-size: 0.7rem; padding: 0.25rem 0.75rem; border-radius: 50px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-        .phase-tag-cyan { background: rgba(78,205,196,0.15); color: var(--teal); }
-        .phase-tag-green { background: rgba(68,189,50,0.15); color: var(--green); }
-        .phase-tag-orange { background: rgba(255,159,67,0.15); color: var(--orange); }
-        .phase-tag-purple { background: rgba(166,108,255,0.15); color: var(--purple); }
-        .phase-tag-pink { background: rgba(255,101,132,0.15); color: var(--accent); }
-        .phase-body { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 1.5rem; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
-        .schedule-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        .schedule-table th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.4); padding: 0.6rem 0.8rem; text-align: left; border-bottom: 1px solid var(--glass-border); }
-        .schedule-table td { padding: 0.7rem 0.8rem; font-size: 0.9rem; color: rgba(255,255,255,0.7); border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
-        .schedule-table tr:last-child td { border-bottom: none; }
-        .schedule-table .day-col { font-family: 'Space Mono', monospace; font-weight: 700; color: var(--teal); font-size: 0.85rem; white-space: nowrap; }
-        .schedule-table .subject-col { font-weight: 500; color: #fff; }
-        .schedule-table .task-col { color: rgba(255,255,255,0.55); font-size: 0.85rem; }
-        .phase-tips { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--glass-border); }
-        .phase-tips h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: rgba(255,255,255,0.6); }
-        .tip-list { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
-        .tip-list li { background: rgba(255,255,255,0.05); padding: 0.35rem 0.9rem; border-radius: 50px; font-size: 0.8rem; color: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.06); }
-
-        /* SUBJECTS */
-        #subjects { padding-top: 5rem; }
-        .subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
-        .subject-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 1.3rem; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: transform 0.3s, border-color 0.3s; cursor: default; }
-        .subject-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.2); }
-        .subject-card .sc-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem; }
-        .subject-card .sc-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-        .subject-icon-teal { background: rgba(78,205,196,0.15); }
-        .subject-icon-violet { background: rgba(108,99,255,0.15); }
-        .subject-icon-orange { background: rgba(255,159,67,0.15); }
-        .subject-icon-purple { background: rgba(166,108,255,0.15); }
-        .subject-icon-pink { background: rgba(255,101,132,0.15); }
-        .subject-icon-green { background: rgba(68,189,50,0.15); }
-        .subject-card .sc-name { font-weight: 600; font-size: 1rem; }
-        .subject-card .sc-topics { font-size: 0.8rem; color: rgba(255,255,255,0.45); line-height: 1.6; margin-bottom: 0.8rem; }
-        .subject-card .sc-priority { display: inline-block; font-size: 0.7rem; padding: 0.2rem 0.7rem; border-radius: 50px; font-weight: 600; letter-spacing: 0.5px; }
-        .priority-high { background: rgba(255,101,132,0.15); color: var(--accent); border: 1px solid rgba(255,101,132,0.3); }
-        .priority-medium { background: rgba(255,159,67,0.15); color: var(--orange); border: 1px solid rgba(255,159,67,0.3); }
-        .priority-low { background: rgba(78,205,196,0.15); color: var(--teal); border: 1px solid rgba(78,205,196,0.3); }
-
-        /* ROUTINE */
-        #routine { padding-top: 5rem; }
-        .routine-timeline { position: relative; padding-left: 2.5rem; }
-        .routine-timeline::before { content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--primary), var(--accent), var(--teal)); border-radius: 2px; }
-        .routine-item { position: relative; margin-bottom: 1.5rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1rem 1.2rem; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
-        .routine-item::before { content: ''; position: absolute; left: -2.5rem; top: 1.2rem; width: 12px; height: 12px; background: var(--teal); border-radius: 50%; border: 2px solid var(--dark); box-shadow: 0 0 10px var(--teal); }
-        .routine-time { font-family: 'Space Mono', monospace; font-size: 0.85rem; font-weight: 700; color: var(--teal); margin-bottom: 0.2rem; }
-        .routine-activity { font-size: 0.95rem; font-weight: 500; color: #fff; margin-bottom: 0.2rem; }
-        .routine-detail { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
-
-        /* TIPS */
-        #tips { padding-top: 5rem; }
-        .tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
-        .tip-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 1.3rem; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: transform 0.3s, border-color 0.3s; }
-        .tip-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.2); }
-        .tip-card .tip-icon { font-size: 1.8rem; margin-bottom: 0.6rem; }
-        .tip-card .tip-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.3rem; }
-        .tip-card .tip-desc { font-size: 0.8rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
-
-        /* INFOGRAPHIC */
-        #infographic { padding-top: 5rem; }
-        .infographic-container { text-align: center; }
-        .infographic-container img { max-width: 100%; height: auto; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
-        .infographic-caption { font-size: 0.85rem; color: rgba(255,255,255,0.4); margin-top: 1rem; }
-
-        /* CHECKLIST */
-        #checklist { padding-top: 5rem; }
-        .checklist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.8rem; }
-        .checklist-item { display: flex; align-items: center; gap: 0.8rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 14px; padding: 0.8rem 1rem; cursor: pointer; transition: all 0.3s; -webkit -user-select: none; }
-        .checklist-item:hover { border-color: rgba(255,255,255,0.2); background: var(--glass-hover); }
-        .checklist-item.checked { border-color: rgba(78,205,196,0.3); opacity: 0.6; }
-        .checklist-item.checked .check-box { background: var(--teal); border-color: var(--teal); }
-        .checklist-item.checked .check-label { text-decoration: line-through; color: rgba(255,255,255,0.35); }
-        .check-box { width: 22px; height: 22px; border: 2px solid rgba(255,255,255,0.25); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.3s; }
-        .check-box svg { width: 12px; height: 12px; stroke: #fff; stroke-width: 3; fill: none; opacity: 0; transition: opacity 0.3s; }
-        .checklist-item.checked .check-box svg { opacity: 1; }
-        .check-label { font-size: 0.85rem; color: rgba(255,255,255,0.65); transition: all 0.3s; }
-        .checklist-progress-bar { width: 100%; max-width: 600px; margin: 0 auto 2rem; }
-        .checklist-progress-bar .clp-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: rgba(255,255,255,0.45); margin-bottom: 0.4rem; }
-        .checklist-progress-bar .clp-track { height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
-        .checklist-progress-bar .clp-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--green)); border-radius: 4px; transition: width 0.5s ease; }
-
-        /* WIDGET */
-        #widget { padding-top: 5rem; }
-        .widget-demo-area { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
-        .phone-frame { width: 320px; max-width: 100%; height: 620px; border-radius: 36px; border: 3px solid rgba(255,255,255,0.15); background: var(--darker); overflow: hidden; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-        .phone-notch { width: 120px; height: 24px; background: var(--dark); border-radius: 0 0 14px 14px; margin: 0 auto; position: relative; z-index: 5; }
-        .phone-screen { height: calc(100% - 24px); overflow-y: auto; padding: 1rem; }
-        .phone-screen::-webkit-scrollbar { width: 0; }
-        .widget-card { background: linear-gradient(135deg, rgba(108,99,255,0.3), rgba(255,101,132,0.2)); border: 1px solid var(--glass-border); border-radius: 20px; padding: 1.2rem; margin-bottom: 1rem; }
-        .widget-card .wc-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.8rem; color: #fff; }
-        .widget-mini-countdown { display: flex; justify-content: space-between; gap: 0.3rem; }
-        .wm-block { flex: 1; text-align: center; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 0.5rem 0.2rem; }
-        .wm-block .wm-num { font-family: 'Space Mono', monospace; font-size: 1.3rem; font-weight: 700; color: #fff; }
-        .wm-block .wm-unit { font-size: 0.6rem; text-transform: uppercase; color: rgba(255,255,255,0.4); letter-spacing: 1px; }
-        .widget-subject-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 14px; padding: 0.8rem 1rem; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.6rem; }
-        .widget-subject-card .ws-icon { font-size: 1rem; }
-        .widget-subject-card .ws-name { font-size: 0.8rem; font-weight: 500; flex: 1; }
-        .widget-subject-card .ws-time { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--teal); }
-        .widget-quote-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 14px; padding: 0.8rem 1rem; font-style: italic; font-size: 0.75rem; color: rgba(255,255,255,0.55); line-height: 1.4; margin-bottom: 0.6rem; transition: opacity 0.3s; }
-        .widget-progress-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 14px; padding: 0.8rem 1rem; }
-        .widget-progress-card .wp-label { font-size: 0.7rem; color: rgba(255,255,255,0.45); margin-bottom: 0.4rem; }
-        .widget-progress-card .wp-bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
-        .widget-progress-card .wp-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 3px; }
-        .embed-code-box { background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1.2rem; width: 100%; max-width: 600px; }
-        .embed-code-box h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; }
-        .embed-code-box p { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-bottom: 0.8rem; }
-        .embed-code-box pre { background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 10px; overflow-x: auto; font-size: 0.75rem; color: var(--teal); font-family: 'Space Mono', monospace; }
-
-        /* FOOTER */
-        footer { text-align: center; padding: 3rem 2rem; font-size: 0.8rem; color: rgba(255,255,255,0.2); border-top: 1px solid var(--glass-border); margin-top: 3rem; }
-        footer .footer-hearts { font-size: 1.2rem; margin-bottom: 0.5rem; }
-        .footer-subtitle { margin-top: 0.5rem; }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) { section { padding: 3rem 1.2rem; } .subjects-grid,.tips-grid,.checklist-grid { grid-template-columns: 1fr; } .routine-timeline { padding-left: 2rem; } .phone-frame { width: 280px; height: 560px; } }
-        @media (max-width: 480px) { .countdown-item .number-container { width: 70px; height: 70px; border-radius: 14px; } .countdown-item .number { font-size: 1.8rem; } .exam-dates { gap: 0.5rem; } }
-
-        /* SCROLL ANIM */
-        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .wrap {
+            width: 100%;
+            max-width: 420px;
+            padding: 28px;
+        }
+        .card {
+            background: linear-gradient(180deg, var(--card), rgba(11,18,32,0.92));
+            border: 1px solid var(--glass);
+            box-shadow: 0 10px 30px rgba(2,6,23,0.7);
+            border-radius: 12px;
+            padding: 28px;
+        }
+        h1 {
+            font-size: 20px;
+            margin: 0 0 6px;
+        }
+        .lead {
+            margin: 0 0 18px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .field { margin-bottom: 12px; }
+        label {
+            display: block;
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.04);
+            background: rgba(255,255,255,0.02);
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        input:focus {
+            border-color: rgba(108,99,255,0.7);
+            box-shadow: 0 0 0 2px rgba(108,99,255,0.2);
+        }
+        .btn {
+            width: 100%;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .hint {
+            background: rgba(255,255,255,0.02);
+            padding: 10px;
+            border-radius: 8px;
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 12px;
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+        .countdown {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+        .cd-item {
+            background: rgba(255,255,255,0.03);
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 68px;
+        }
+        .cd-num {
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .cd-label {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+        .msg {
+            margin-top: 12px;
+            font-size: 13px;
+            min-height: 18px;
+        }
+        .footer {
+            margin-top: 18px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .home-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
-    <div class="bg-animation"><div class="orb"></div><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
-    <div class="particles" id="particles"></div>
+    <div class="wrap">
+        <div class="card" role="main">
+            <h1>Welcome to Bravin</h1>
+            <p class="lead">Please sign in to continue to the study hub.</p>
 
-    <nav>
-        <div class="logo">KJSEA '26</div>
-        <ul class="nav-links">
-            <li><a class="page-link" href="#hero">Countdown</a></li>
-            <li><a class="page-link" href="#schedule">Schedule</a></li>
-            <li><a class="page-link" href="#subjects">Subjects</a></li>
-            <li><a class="page-link" href="#routine">Routine</a></li>
-            <li><a class="page-link" href="#tips">Tips</a></li>
-            <li><a class="page-link" href="#infographic">Infographic</a></li>
-            <li><a class="page-link" href="#checklist">Checklist</a></li>
-            <li><a class="page-link" href="widget.html">Widget Page</a></li>
-            <li><a class="page-link" href="gallery.html">Gallery</a></li>
-            <li><a class="page-link" href="gallery1.html">Gallery1</a></li>
-        </ul>
-        <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
-    </nav>
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="#hero">⏱ Countdown</a><a href="#schedule">📅 Schedule</a><a href="#subjects">📚 Subjects</a>
-        <a href="#routine">🕐 Routine</a><a href="#tips">💡 Tips</a><a href="#infographic">🎨 Infographic</a>
-        <a href="#checklist">✅ Checklist</a><a href="widget.html">📱 Widget</a><a href="gallery.html">🖼 Gallery</a>
+            <form id="loginForm" onsubmit="return handleLogin(event)">
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input id="username" type="text" autocomplete="username" placeholder="Enter username" />
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" autocomplete="current-password" placeholder="Enter password" />
+                </div>
+                <button class="btn" type="submit">Sign In</button>
+            </form>
+
+            <div class="hint">
+                Demo credentials — username: <strong>Bravin</strong> &middot; password: <strong>KJSEA@2026</strong>
+                <div style="margin-top:8px;font-size:12px;color:var(--muted)">Successful login will navigate to the main site (home.html).</div>
+            </div>
+
+            <div class="countdown" aria-live="polite" aria-atomic="true" id="countdown">
+                <div class="cd-item"><div class="cd-num" id="cd-days">--</div><div class="cd-label">Days</div></div>
+                <div class="cd-item"><div class="cd-num" id="cd-hours">--</div><div class="cd-label">Hours</div></div>
+                <div class="cd-item"><div class="cd-num" id="cd-mins">--</div><div class="cd-label">Minutes</div></div>
+                <div class="cd-item"><div class="cd-num" id="cd-secs">--</div><div class="cd-label">Seconds</div></div>
+            </div>
+
+            <div class="msg" id="message"></div>
+
+            <div class="footer">Or open the site directly: <a class="home-link" href="home.html">Home Page</a></div>
+        </div>
     </div>
-
-    <div class="container">
-
-        <!-- HERO -->
-        <section id="hero">
-            <div class="exam-badge"><span class="dot"></span><span>Kenya Junior Secondary Education Assessment</span></div>
-            <h1 class="main-title">KJSEA 2026</h1>
-            <p class="subtitle">Your National Exams Countdown & Study Hub</p>
-            <div class="exam-dates">
-                <div class="date-card"><div class="label">Exams Begin</div><div class="date">26 Oct 2026</div></div>
-                <div class="date-separator">→</div>
-                <div class="date-card"><div class="label">Exams End</div><div class="date">30 Oct 2026</div></div>
-            </div>
-            <div class="exam-active-banner" id="examActive"><h2>📝 Exams In Progress!</h2><p>Stay focused. You've got this!</p></div>
-            <div class="exam-done-banner" id="examDone"><h2>🎉 Exams Complete!</h2><p>Well done! Time to celebrate.</p></div>
-            <div id="countdownWrapper">
-                <div class="countdown-label" id="countdownLabel">Countdown to Exams</div>
-                <div class="countdown">
-                    <div class="countdown-item"><div class="number-container"><span class="number" id="days">--</span></div><span class="unit">Days</span></div>
-                    <div class="countdown-item"><div class="number-container"><span class="number" id="hours">--</span></div><span class="unit">Hours</span></div>
-                    <div class="countdown-item"><div class="number-container"><span class="number" id="minutes">--</span></div><span class="unit">Minutes</span></div>
-                    <div class="countdown-item"><div class="number-container"><span class="number" id="seconds">--</span></div><span class="unit">Seconds</span></div>
-                </div>
-            </div>
-            <div class="progress-section" id="progressSection">
-                <div class="progress-label"><span>Preparation Journey</span><span id="progressPercent">0%</span></div>
-                <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
-            </div>
-            <div class="quote-section"><p class="quote-text" id="quoteText"></p><p class="quote-author" id="quoteAuthor"></p></div>
-        </section>
-
-        <!-- SCHEDULE -->
-        <section id="schedule">
-            <div class="section-divider"></div>
-            <h2 class="section-title">Study Schedule</h2>
-            <p class="section-subtitle">A structured 5-phase plan from now until exam day. Each phase builds on the last.</p>
-
-            <div class="schedule-phase reveal">
-                <div class="phase-header">
-                    <div class="phase-icon phase-cyan">🔵</div>
-                    <div class="phase-header-text"><h3>Phase 1 — Foundation</h3><span class="phase-dates">Now – 31 Dec 2025</span></div>
-                    <span class="phase-tag phase-tag-cyan">Current</span>
-                </div>
-                <div class="phase-body">
-                    <table class="schedule-table"><thead><tr><th>Day</th><th>Subject</th><th>Task</th></tr></thead><tbody>
-                        <tr><td class="day-col">Mon</td><td class="subject-col">Mathematics</td><td class="task-col">Review core concepts: algebra, geometry basics</td></tr>
-                        <tr><td class="day-col">Tue</td><td class="subject-col">English</td><td class="task-col">Reading comprehension & grammar rules</td></tr>
-                        <tr><td class="day-col">Wed</td><td class="subject-col">Science</td><td class="task-col">Biology: cells, human body systems</td></tr>
-                        <tr><td class="day-col">Thu</td><td class="subject-col">Social Studies</td><td class="task-col">Kenyan history, government structure</td></tr>
-                        <tr><td class="day-col">Fri</td><td class="subject-col">Mathematics</td><td class="task-col">Practice problems: fractions, decimals</td></tr>
-                        <tr><td class="day-col">Sat</td><td class="subject-col">English</td><td class="task-col">Creative writing & essay structure</td></tr>
-                        <tr><td class="day-col">Sun</td><td class="subject-col">Review</td><td class="task-col">Light review of the week's topics</td></tr>
-                    </tbody></table>
-                    <div class="phase-tips"><h4>Phase Tips</h4><ul class="tip-list"><li>2–3 hrs/day</li><li>Focus on weak areas</li><li>Make summary notes</li><li>Don't rush</li><li>Use past papers</li></ul></div>
-                </div>
-            </div>
-
-            <div class="schedule-phase reveal">
-                <div class="phase-header">
-                    <div class="phase-icon phase-green">🟢</div>
-                    <div class="phase-header-text"><h3>Phase 2 — Build Up</h3><span class="phase-dates">1 Jan – 30 Apr 2026</span></div>
-                    <span class="phase-tag phase-tag-green">Up Next</span>
-                </div>
-                <div class="phase-body">
-                    <table class="schedule-table"><thead><tr><th>Day</th><th>Subject</th><th>Task</th></tr></thead><tbody>
-                        <tr><td class="day-col">Mon</td><td class="subject-col">Mathematics</td><td class="task-col">Advanced topics: ratios, percentages, data handling</td></tr>
-                        <tr><td class="day-col">Tue</td><td class="subject-col">Science</td><td class="task-col">Physics: forces, energy, simple machines</td></tr>
-                        <tr><td class="day-col">Wed</td><td class="subject-col">English</td><td class="task-col">Literature analysis & poetry techniques</td></tr>
-                        <tr><td class="day-col">Thu</td><td class="subject-col">Social Studies</td><td class="task-col">Geography: climate, maps, resources</td></tr>
-                        <tr><td class="day-col">Fri</td><td class="subject-col">Mathematics</td><td class="task-col">Geometry & measurement practice</td></tr>
-                        <tr><td class="day-col">Sat</td><td class="subject-col">Science</td><td class="task-col">Chemistry: matter, elements, reactions</td></tr>
-                        <tr><td class="day-col">Sun</td><td class="subject-col">Mixed</td><td class="task-col">Past paper practice (2 papers)</td></tr>
-                    </tbody></table>
-                    <div class="phase-tips"><h4>Phase Tips</h4><ul class="tip-list"><li>3–4 hrs/day</li><li>Deep-dive topics</li><li>Create mind maps</li><li>Group study sessions</li><li>Ask teachers questions</li><li>Start timed practice</li></ul></div>
-                </div>
-            </div>
-
-            <div class="schedule-phase reveal">
-                <div class="phase-header">
-                    <div class="phase-icon phase-orange">🟠</div>
-                    <div class="phase-header-text"><h3>Phase 3 — Intensive Practice</h3><span class="phase-dates">1 May – 31 Jul 2026</span></div>
-                    <span class="phase-tag phase-tag-orange">Intensive</span>
-                </div>
-                <div class="phase-body">
-                    <table class="schedule-table"><thead><tr><th>Day</th><th>Subject</th><th>Task</th></tr></thead><tbody>
-                        <tr><td class="day-col">Mon</td><td class="subject-col">Mathematics</td><td class="task-col">Full past papers under timed conditions</td></tr>
-                        <tr><td class="day-col">Tue</td><td class="subject-col">English</td><td class="task-col">Full past papers + essay writing timed</td></tr>
-                        <tr><td class="day-col">Wed</td><td class="subject-col">Science</td><td class="task-col">Full past papers — mark and review errors</td></tr>
-                        <tr><td class="day-col">Thu</td><td class="subject-col">Social Studies</td><td class="task-col">Full past papers + map work practice</td></tr>
-                        <tr><td class="day-col">Fri</td><td class="subject-col">Weakest Subject</td><td class="task-col">Targeted practice on identified weak areas</td></tr>
-                        <tr><td class="day-col">Sat</td><td class="subject-col">Mixed</td><td class="task-col">Full mock exam simulation (all subjects)</td></tr>
-                        <tr><td class="day-col">Sun</td><td class="subject-col">Review</td><td class="task-col">Error analysis & revision of weak topics</td></tr>
-                    </tbody></table>
-                    <div class="phase-tips"><h4>Phase Tips</h4><ul class="tip-list"><li>4–5 hrs/day</li><li>Simulate exam conditions</li><li>Track scores weekly</li><li>Review every mistake</li><li>Use a timer always</li><li>Join study groups</li><li>Stay consistent</li></ul></div>
-                </div>
-            </div>
-
-            <div class="schedule-phase reveal">
-                <div class="phase-header">
-                    <div class="phase-icon phase-purple">🟣</div>
-                    <div class="phase-header-text"><h3>Phase 4 — Final Review</h3><span class="phase-dates">1 Aug – 30 Sep 2026</span></div>
-                    <span class="phase-tag phase-tag-purple">Sprint</span>
-                </div>
-                <div class="phase-body">
-                    <table class="schedule-table"><thead><tr><th>Day</th><th>Subject</th><th>Task</th></tr></thead><tbody>
-                        <tr><td class="day-col">Mon–Tue</td><td class="subject-col">Mathematics</td><td class="task-col">Revise all formulas, theorems & key methods</td></tr>
-                        <tr><td class="day-col">Wed–Thu</td><td class="subject-col">English</td><td class="task-col">Revise grammar, comprehension strategies, essays</td></tr>
-                        <tr><td class="day-col">Fri–Sat</td><td class="subject-col">Science</td><td class="task-col">Revise all experiments, definitions, diagrams</td></tr>
-                        <tr><td class="day-col">Sun</td><td class="subject-col">Social Studies</td><td class="task-col">Key dates, maps, constitutional points</td></tr>
-                    </tbody></table>
-                    <div class="phase-tips"><h4>Phase Tips</h4><ul class="tip-list"><li>3–4 hrs/day</li><li>Review summary notes</li><li>Flashcards daily</li><li>Teach concepts to others</li><li>Avoid new material</li><li>Sleep 8 hours</li><li>Stay hydrated</li></ul></div>
-                </div>
-            </div>
-
-            <div class="schedule-phase reveal">
-                <div class="phase-header">
-                    <div class="phase-icon phase-pink">🔴</div>
-                    <div class="phase-header-text"><h3>Phase 5 — Exam Ready</h3><span class="phase-dates">1 Oct – 25 Oct 2026</span></div>
-                    <span class="phase-tag phase-tag-pink">Final</span>
-                </div>
-                <div class="phase-body">
-                    <table class="schedule-table"><thead><tr><th>Day</th><th>Subject</th><th>Task</th></tr></thead><tbody>
-                        <tr><td class="day-col">Mon</td><td class="subject-col">Light Review</td><td class="task-col">Browse summary notes only — no deep study</td></tr>
-                        <tr><td class="day-col">Tue</td><td class="subject-col">Quick Practice</td><td class="task-col">2-3 easy problems per subject for confidence</td></tr>
-                        <tr><td class="day-col">Wed</td><td class="subject-col">Past Paper Glance</td><td class="task-col">Skim past papers, review common mistakes</td></tr>
-                        <tr><td class="day-col">Thu</td><td class="subject-col">Rest Day</td><td class="task-col">Full rest — relax, sleep, eat well</td></tr>
-                        <tr><td class="day-col">Fri</td><td class="subject-col">Exam Prep</td><td class="task-col">Pack supplies, confirm timetable, sleep early</td></tr>
-                        <tr><td class="day-col">Sat</td><td class="subject-col">Exam Day</td><td class="task-col">Stay calm, read questions carefully, manage time</td></tr>
-                        <tr><td class="day-col">Sun</td><td class="subject-col">Recovery</td><td class="task-col">Light review for next exam, stay positive</td></tr>
-                    </tbody></table>
-                    <div class="phase-tips"><h4>Phase Tips</h4><ul class="tip-list"><li>1–2 hrs max/day</li><li>Confidence building</li><li>Sleep 8+ hours</li><li>Eat well</li><li>Stay calm</li><li>Visualize success</li><li>You are ready!</li></ul></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SUBJECTS -->
-        <section id="subjects">
-            <div class="section-divider"></div>
-            <h2 class="section-title">KJSEA Subjects Guide</h2>
-            <p class="section-subtitle">Key subjects, priority topics, and what to focus on for each paper.</p>
-            <div class="subjects-grid reveal">
-                <div class="subject-card"><div class="sc-header"><div class="sc-icon subject-icon-teal">📐</div><span class="sc-name">Mathematics</span></div><div class="sc-topics">Algebra, Geometry, Measurements, Data Handling, Ratios, Percentages, Number Operations, Money & Financial Maths</div><span class="sc-priority priority-high">High Priority</span></div>
-                <div class="subject-card"><div class="sc-header"><div class="sc-icon subject-icon-violet">📖</div><span class="sc-name">English</span></div><div class="sc-topics">Comprehension, Grammar, Creative Writing, Poetry, Literature, Summary Writing, Oral Skills</div><span class="sc-priority priority-high">High Priority</span></div>
-                <div class="subject-card"><div class="sc-header"><div class="sc-icon subject-icon-orange">🔬</div><span class="sc-name">Integrated Science</span></div><div class="sc-topics">Biology (Cells, Human Body), Physics (Forces, Energy, Machines), Chemistry (Matter, Reactions)</div><span class="sc-priority priority-high">High Priority</span></div>
-                <div class="subject-card"><div class="sc-header"><div class="sc-icon subject-icon-purple">🌍</div><span class="sc-name">Social Studies</span></div><div class="sc-topics">Kenyan History, Government, Constitution, Geography, Maps, Climate, Resources, Citizenship</div><span class="sc-priority priority-medium">Medium Priority</span></div>
-                <div class="subject-card"><div class="sc-header"><div class="sc-icon subject-icon-pink">🧮</div><span class="sc-name">Pre-Technical</span></div><div class="sc-topics">Drawing, Materials, Safety, Tools, Measurements, Basic Construction Concepts</div><span class="sc-priority priority-medium">Medium Priority</span></div>
-                <div class="subject-card"><div class="sc-header"><div class="sc-icon subject-icon-green">💻</div><span class="sc-name">Computer Science</span></div><div class="sc-topics">Digital Literacy, Basic Programming, Networking, Hardware, Safety Online</div><span class="sc-priority priority-low">Lower Priority</span></div>
-                <div class="subject-card"><div class="sc-header"><div class="sc-icon subject-icon-orange">🎨</div><span class="sc-name">Creative Arts</span></div><div class="sc-topics">Visual Arts, Performing Arts, Music, Art Appreciation</div><span class="sc-priority priority-low">Lower Priority</span></div>
-                <div class="subject-card"><div class="sc-header"><div class="sc-icon subject-icon-teal">🏃</div><span class="sc-name">Physical Education</span></div><div class="sc-topics">Fitness, Sports, Health & Nutrition, First Aid, Recreation</div><span class="sc-priority priority-low">Lower Priority</span></div>
-            </div>
-        </section>
-
-        <!-- ROUTINE -->
-        <section id="routine">
-            <div class="section-divider"></div>
-            <h2 class="section-title">Ideal Daily Study Routine</h2>
-            <p class="section-subtitle">A balanced daily schedule that maximizes focus while keeping you healthy.</p>
-            <div class="routine-timeline reveal">
-                <div class="routine-item"><div class="routine-time">05:30</div><div class="routine-activity">🚀 Wake Up & Hydrate</div><div class="routine-detail">Drink water, light stretching, freshen up</div></div>
-                <div class="routine-item"><div class="routine-time">05:45 – 06:30</div><div class="routine-activity">📖 Morning Review Session</div><div class="routine-detail">Review yesterday's notes, flashcards, key formulas</div></div>
-                <div class="routine-item"><div class="routine-time">06:30 – 07:00</div><div class="routine-activity">🍳 Breakfast & Prep</div><div class="routine-detail">Healthy breakfast — proteins + complex carbs for brain fuel</div></div>
-                <div class="routine-item"><div class="routine-time">07:00 – 13:00</div><div class="routine-activity">🏫 School Hours</div><div class="routine-detail">Pay attention in class, take active notes, ask questions</div></div>
-                <div class="routine-item"><div class="routine-time">13:00 – 14:00</div><div class="routine-activity">🍽 Lunch & Rest</div><div class="routine-detail">Proper meal, short nap or relaxation (20–30 min max)</div></div>
-                <div class="routine-item"><div class="routine-time">14:00 – 16:00</div><div class="routine-activity">📚 Deep Study Block 1</div><div class="routine-detail">Focus on hardest subject — use Pomodoro (25 min study + 5 min break)</div></div>
-                <div class="routine-item"><div class="routine-time">16:00 – 16:30</div><div class="routine-activity">🏃 Break & Exercise</div><div class="routine-detail">Physical activity — walk, jog, stretch. Clears the mind.</div></div>
-                <div class="routine-item"><div class="routine-time">16:30 – 18:00</div><div class="routine-activity">📝 Deep Study Block 2</div><div class="routine-detail">Second subject focus — practice papers, exercises</div></div>
-                <div class="routine-item"><div class="routine-time">18:00 – 19:00</div><div class="routine-activity">🍽 Dinner & Family Time</div><div class="routine-detail">Eat well, relax with family, disconnect from study</div></div>
-                <div class="routine-item"><div class="routine-time">19:00 – 20:30</div><div class="routine-activity">🔄 Light Review & Revision</div><div class="routine-detail">Review notes, make summaries, light practice — no new topics</div></div>
-                <div class="routine-item"><div class="routine-time">20:30 – 21:00</div><div class="routine-activity">🧘 Wind Down</div><div class="routine-detail">No screens, relax, prepare for tomorrow</div></div>
-                <div class="routine-item"><div class="routine-time">21:00</div><div class="routine-activity">😴 Sleep</div><div class="routine-detail">8+ hours of sleep — your brain consolidates memories while you rest!</div></div>
-            </div>
-        </section>
-
-        <!-- TIPS -->
-        <section id="tips">
-            <div class="section-divider"></div>
-            <h2 class="section-title">Pro Study Tips</h2>
-            <p class="section-subtitle">Science-backed strategies that top students actually use.</p>
-            <div class="tips-grid reveal">
-                <div class="tip-card"><div class="tip-icon">🧠</div><div class="tip-title">Spaced Repetition</div><div class="tip-desc">Review material at increasing intervals (1 day → 3 days → 7 days). This fights the forgetting curve and locks info into long-term memory.</div></div>
-                <div class="tip-card"><div class="tip-icon">✍️</div><div class="tip-title">Active Recall</div><div class="tip-desc">Close your notes and try to remember. Test yourself BEFORE looking at answers. This is 3x more effective than re-reading.</div></div>
-                <div class="tip-card"><div class="tip-icon">⏱</div><div class="tip-title">Pomodoro Technique</div><div class="tip-desc">Study 25 min → Break 5 min → Repeat. After 4 rounds, take a 15-30 min break. Keeps focus sharp.</div></div>
-                <div class="tip-card"><div class="tip-icon">🗺</div><div class="tip-title">Mind Mapping</div><div class="tip-desc">Draw visual connections between concepts. Great for subjects like Science & Social Studies where topics interconnect.</div></div>
-                <div class="tip-card"><div class="tip-icon">📝</div><div class="tip-title">Past Papers First</div><div class="tip-desc">KNEC repeats patterns. Do past papers early, not just before exams. Identify recurring question types and master them.</div></div>
-                <div class="tip-card"><div class="tip-icon">🗣</div><div class="tip-title">Teach Someone</div><div class="tip-desc">Explain a concept to a friend or sibling. If you can teach it simply, you truly understand it. (Feynman Technique)</div></div>
-                <div class="tip-card"><div class="tip-icon">😴</div><div class="tip-title">Sleep = Memory</div><div class="tip-desc">Your brain consolidates what you learned during deep sleep. Less than 7 hrs = 40% worse recall. Never sacrifice sleep for study.</div></div>
-                <div class="tip-card"><div class="tip-icon">🥗</div><div class="tip-title">Brain Food</div><div class="tip-desc">Eat eggs, fish, nuts, fruits, and drink water. Avoid heavy sugar — it causes energy crashes that kill concentration.</div></div>
-                <div class="tip-card"><div class="tip-icon">📵</div><div class="tip-title">Phone Away</div><div class="tip-desc">Put your phone in another room during study blocks. Even seeing it reduces cognitive capacity by 10%.</div></div>
-                <div class="tip-card"><div class="tip-icon">🎯</div><div class="tip-title">Start Hard, Finish Easy</div><div class="tip-desc">Tackle your hardest subject first when energy is highest. Save easier tasks for when you're tired.</div></div>
-                <div class="tip-card"><div class="tip-icon">📊</div><div class="tip-title">Track Your Scores</div><div class="tip-desc">Keep a simple score log for every practice test. Watch your improvement — it's motivating and shows what still needs work.</div></div>
-                <div class="tip-card"><div class="tip-icon">🧘</div><div class="tip-title">Manage Exam Anxiety</div><div class="tip-desc">Breathe in 4 sec → hold 4 sec → out 6 sec. Do this before exams. A little stress is normal — it keeps you sharp.</div></div>
-            </div>
-        </section>
-
-        <!-- INFOGRAPHIC -->
-        <section id="infographic">
-            <div class="section-divider"></div>
-            <h2 class="section-title">Study Plan Infographic</h2>
-            <p class="section-subtitle">A visual roadmap of your entire KJSEA 2026 preparation journey.</p>
-            <div class="infographic-container reveal">
-                <img src="https://storage.googleapis.com/ot-pt/code_agent/nano2_image_generator/2026-08-26/fcf96cf235cf/kjsea_study_infographic.png?Expires=1790322103&GoogleAccessId=gcs-owner%40oreateai-434511.iam.gserviceaccount.com&Signature=ht%2Fk7i8escnX5rtdaqUXLTKNL5XD3h6qaGlQn%2FVyHQrG%2BMS4t%2Fr6q1X5enmgqaxEiHSguaBVG%2Fa17yG3ZMlLcQQMZUNQbHjKec7%2BBR8gpEEGmBJjhH%2FfXlh7c2luJOsWp5jMEmdkYrVoSu3mPdjqyq%2FEJdZQ7v0NqdgF7lfWcG07Ld73%2Fr3uVhu9UIT%2F5FHdqf3I%2BOMXsTc%2FZ0SVblzdfTsQz7aeqhIwRe9uLALSclcw5nfpLKHEf6KiHEoZJPHKdDtYdPvfGd6L8aypCoeegpYKGgR0z4CBaULhzn17L5dvmeix%2FydC2ihE07AZ9MGfi3cg9DFy%2BeWc8OOMUrmekQ%3D%3D" alt="KJSEA 2026 Study Plan Infographic">
-                <p class="infographic-caption">Save this infographic to your phone for daily motivation! 📱</p>
-            </div>
-        </section>
-
-        <!-- CHECKLIST -->
-        <section id="checklist">
-            <div class="section-divider"></div>
-            <h2 class="section-title">Exam Readiness Checklist</h2>
-            <p class="section-subtitle">Track your preparation progress — check items off as you complete them.</p>
-            <div class="checklist-progress-bar">
-                <div class="clp-label"><span>Completed</span><span id="clpPercent">0%</span></div>
-                <div class="clp-track"><div class="clp-fill" id="clpFill"></div></div>
-            </div>
-            <div class="checklist-grid reveal">
-                <div class="checklist-item" onclick="toggleCheck(this)"><div class="check-box"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span class="check-label">Collected all past KJSEA papers</span></div>
-                <div class="checklist-item" onclick="toggleCheck(this)"><div class="check-box"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span class="check-label">Created subject summary notes</span></div>
-                <div class="checklist-item" onclick="toggleCheck(this)"><div class="check-box"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span class="check-label">Completed 5+ past papers per subject</span></div>
-                <div class="checklist-item" onclick="toggleCheck(this)"><div class="check-box"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span class="check-label">Reviewed all weak topic areas</span></div>
-                <div class="checklist-item" onclick="toggleCheck(this)"><div class="check-box"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span class="check-label">Practiced under timed conditions</span></div>
-                <div class="checklist-item" onclick="toggleCheck(this)"><div class="check-box"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span class="check-label">Made flashcards for formulas & definitions</span></div>
-                <div class="checklist-item" onclick="toggleCheck(this)"><div class="check-box"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span class="check-label">Mastered map work & diagram drawing</span></div>
-                <div class="checklist-item" onclick="toggleCheck(this)"><div class="check-box"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span class="check-label">Reviewed KJSEA syllabus coverage</span></div>
-                <div class="checklist-item" onclick="toggleCheck(this)"><div class="check-box"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span class="check-label">Joined a study group</span></div>
-                <div class="checklist-item" onclick="toggleCheck(this)"><div class="check-box"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span class="check-label">Established consistent sleep schedule</span></div>
-                <div class="checklist-item" onclick="toggleCheck(this)"><div class="check-box"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span class="check-label">Prepared exam stationery & materials</span></div>
-                <div class="checklist-item" onclick="toggleCheck(this)"><div class="check-box"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span class="check-label">Confirmed exam centre & timetable</span></div>
-                <div class="checklist-item" onclick="toggleCheck(this)"><div class="check-box"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span class="check-label">Practiced exam-day morning routine</span></div>
-                <div class="checklist-item" onclick="toggleCheck(this)"><div class="check-box"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div><span class="check-label">Visualized success & built confidence</span></div>
-            </div>
-        </section>
-
-        <!-- WIDGET -->
-        <section id="widget">
-            <div class="section-divider"></div>
-            <h2 class="section-title">Mobile Widget Preview</h2>
-            <p class="section-subtitle">A compact phone-friendly version for your home screen or quick daily check-in.</p>
-            <div class="widget-demo-area reveal">
-                <div class="phone-frame">
-                    <div class="phone-notch"></div>
-                    <div class="phone-screen">
-                        <div class="widget-card">
-                            <div class="wc-title">⏱ KJSEA 2026 Countdown</div>
-                            <div class="widget-mini-countdown" id="widgetCountdown">
-                                <div class="wm-block"><div class="wm-num" id="wd">--</div><div class="wm-unit">Days</div></div>
-                                <div class="wm-block"><div class="wm-num" id="wh">--</div><div class="wm-unit">Hrs</div></div>
-                                <div class="wm-block"><div class="wm-num" id="wm">--</div><div class="wm-unit">Min</div></div>
-                                <div class="wm-block"><div class="wm-num" id="ws">--</div><div class="wm-unit">Sec</div></div>
-                            </div>
-                        </div>
-                        <div class="widget-subject-card"><span class="ws-icon">📐</span><span class="ws-name">Mathematics</span><span class="ws-time">2 hrs</span></div>
-                        <div class="widget-subject-card"><span class="ws-icon">📖</span><span class="ws-name">English</span><span class="ws-time">1.5 hrs</span></div>
-                        <div class="widget-subject-card"><span class="ws-icon">🔬</span><span class="ws-name">Science</span><span class="ws-time">1.5 hrs</span></div>
-                        <div class="widget-subject-card"><span class="ws-icon">🌍</span><span class="ws-name">Social Studies</span><span class="ws-time">1 hr</span></div>
-                        <div class="widget-quote-card" id="widgetQuote">"Education is the most powerful weapon which you can use to change the world." — Nelson Mandela</div>
-                        <div class="widget-progress-card">
-                            <div class="wp-label">Prep Progress: <span id="wpPct">0%</span></div>
-                            <div class="wp-bar"><div class="wp-fill" id="wpFill"></div></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="embed-code-box">
-                    <h4>📱 Use the Mobile Widget</h4>
-                    <p>Save the <code>widget.html</code> file to your phone and add it to your home screen.</p>
-                    <pre>How to add to home screen:
-
-1. Open widget.html in Chrome/Safari
-2. Tap the ⋮ or Share button
-3. Select "Add to Home Screen"
-4. Name it "KJSEA Countdown"
-5. Done! Check it daily 🚀</pre>
-                </div>
-            </div>
-        </section>
-
-    </div>
-
-    <footer>
-        <div class="footer-hearts">🇰🇪 ❤️ 📚</div>
-        <p>Built with ❤️ for your KJSEA journey — Give it your best!</p>
-        <p class="footer-subtitle">Kenya Junior Secondary Education Assessment 2026</p>
-    </footer>
 
     <script>
-        const EXAM_START = new Date('2026-10-26T00:00:00');
-        const EXAM_END = new Date('2026-10-30T23:59:59');
-        const PREP_START = new Date('2025-08-26T00:00:00');
-        const daysEl = document.getElementById('days');
-        const hoursEl = document.getElementById('hours');
-        const minutesEl = document.getElementById('minutes');
-        const secondsEl = document.getElementById('seconds');
-        const countdownLabel = document.getElementById('countdownLabel');
-        const examActive = document.getElementById('examActive');
-        const examDone = document.getElementById('examDone');
-        const progressBar = document.getElementById('progressBar');
-        const progressPercent = document.getElementById('progressPercent');
-        const wdEl = document.getElementById('wd');
-        const whEl = document.getElementById('wh');
-        const wmEl = document.getElementById('wm');
-        const wsEl = document.getElementById('ws');
-        const wpFill = document.getElementById('wpFill');
-        const wpPct = document.getElementById('wpPct');
-        const quoteText = document.getElementById('quoteText');
-        const quoteAuthor = document.getElementById('quoteAuthor');
+        const CORRECT_USER = 'Bravin';
+        const CORRECT_PASS = 'KJSEA@2026';
 
-        const quotes = [
-            { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
-            { text: "The expert in anything was once a beginner.", author: "Helen Hayes" },
-            { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
-            { text: "Education is the most powerful weapon which you can use to change the world.", author: "Nelson Mandela" },
-            { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
-            { text: "It always seems impossible until it's done.", author: "Nelson Mandela" },
-            { text: "Hardships often prepare ordinary people for an extraordinary destiny.", author: "C.S. Lewis" },
-            { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
-            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
-            { text: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar" },
-            { text: "Discipline is choosing between what you want now and what you want most.", author: "Abraham Lincoln" },
-            { text: "The beautiful thing about learning is that nobody can take it away from you.", author: "B.B. King" },
-        ];
+        function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('username').value.trim();
+            const p = document.getElementById('password').value;
+            const msg = document.getElementById('message');
 
-        let currentQuoteIndex = Math.floor(Math.random() * quotes.length);
-        function showQuote() {
-            const q = quotes[currentQuoteIndex];
-            quoteText.style.opacity = 0;
-            quoteAuthor.style.opacity = 0;
-            setTimeout(() => {
-                quoteText.textContent = '"' + q.text + '"';
-                quoteAuthor.textContent = '— ' + q.author;
-                quoteText.style.opacity = 1;
-                quoteAuthor.style.opacity = 1;
-            }, 400);
-            currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+            if (u === CORRECT_USER && p === CORRECT_PASS) {
+                msg.style.color = '#a7f3d0';
+                msg.textContent = 'Login successful — Redirecting...';
+                setTimeout(() => { window.location.href = 'home.html'; }, 900);
+            } else {
+                msg.style.color = '#ffb3b3';
+                msg.textContent = 'Invalid username or password.';
+            }
+            return false;
         }
-        showQuote();
-        setInterval(showQuote, 10000);
 
+        const target = new Date('2027-01-01T00:00:00');
         function pad(n) { return String(n).padStart(2, '0'); }
-        function updateDigit(el, val) { if (el.textContent !== val) { el.textContent = val; el.classList.remove('flip'); void el.offsetWidth; el.classList.add('flip'); } }
-
         function updateCountdown() {
             const now = new Date();
-            if (now >= EXAM_END) { document.getElementById('countdownWrapper').style.display = 'none'; examDone.style.display = 'block'; examActive.style.display = 'none'; return; }
-            let target, label;
-            if (now >= EXAM_START && now < EXAM_END) { target = EXAM_END; label = 'Exams In Progress — Time Remaining'; examActive.style.display = 'block'; }
-            else { target = EXAM_START; label = 'Countdown to Exams'; examActive.style.display = 'none'; }
-            countdownLabel.textContent = label;
-            const diff = target - now;
-            const d = Math.floor(diff / (1000*60*60*24));
-            const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-            const m = Math.floor((diff % (1000*60*60)) / (1000*60));
-            const s = Math.floor((diff % (1000*60)) / 1000);
-            updateDigit(daysEl, pad(d)); updateDigit(hoursEl, pad(h)); updateDigit(minutesEl, pad(m)); updateDigit(secondsEl, pad(s));
-            updateDigit(wdEl, pad(d)); updateDigit(whEl, pad(h)); updateDigit(wmEl, pad(m)); updateDigit(wsEl, pad(s));
-            let pct;
-            if (now >= EXAM_START) { const examDuration = EXAM_END - EXAM_START; pct = Math.min(100, Math.round(((now - EXAM_START) / examDuration) * 100)); }
-            else { const totalPrep = EXAM_START - PREP_START; pct = Math.min(100, Math.max(0, Math.round(((now - PREP_START) / totalPrep) * 100))); }
-            progressBar.style.width = pct + '%'; progressPercent.textContent = pct + '%';
-            wpFill.style.width = pct + '%'; wpPct.textContent = pct + '%';
+            let diff = Math.max(0, target - now);
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            diff -= days * (1000 * 60 * 60 * 24);
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            diff -= hours * (1000 * 60 * 60);
+            const mins = Math.floor(diff / (1000 * 60));
+            diff -= mins * (1000 * 60);
+            const secs = Math.floor(diff / 1000);
+
+            document.getElementById('cd-days').textContent = days;
+            document.getElementById('cd-hours').textContent = pad(hours);
+            document.getElementById('cd-mins').textContent = pad(mins);
+            document.getElementById('cd-secs').textContent = pad(secs);
         }
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
-        // Particles
-        (function() { const c = document.getElementById('particles'); for (let i = 0; i < 40; i++) { const p = document.createElement('div'); p.className = 'particle'; p.style.left = Math.random() * 100 + '%'; p.style.animationDuration = (6 + Math.random() * 10) + 's'; p.style.animationDelay = (Math.random() * 8) + 's'; p.style.width = p.style.height = (2 + Math.random() * 3) + 'px'; p.style.opacity = 0.15 + Math.random() * 0.4; c.appendChild(p); } })();
-
-        // Checklist
-        function toggleCheck(el) { el.classList.toggle('checked'); updateChecklistProgress(); saveChecklist(); }
-        function updateChecklistProgress() { const items = document.querySelectorAll('.checklist-item'); const checked = document.querySelectorAll('.checklist-item.checked'); const pct = Math.round((checked.length / items.length) * 100); document.getElementById('clpFill').style.width = pct + '%'; document.getElementById('clpPercent').textContent = pct + '%'; }
-        function saveChecklist() { const items = document.querySelectorAll('.checklist-item'); const state = Array.from(items).map(i => i.classList.contains('checked')); localStorage.setItem('kjsea_checklist', JSON.stringify(state)); }
-        function loadChecklist() { try { const saved = JSON.parse(localStorage.getItem('kjsea_checklist') || '[]'); const items = document.querySelectorAll('.checklist-item'); saved.forEach((val, i) => { if (val && items[i]) items[i].classList.add('checked'); }); updateChecklistProgress(); } catch(e) {} }
-        loadChecklist();
-
-        // Mobile Menu
-        document.getElementById('hamburgerBtn').addEventListener('click', () => { document.getElementById('mobileMenu').classList.toggle('open'); });
-        document.getElementById('mobileMenu').querySelectorAll('a').forEach(a => { a.addEventListener('click', () => { document.getElementById('mobileMenu').classList.remove('open'); }); });
-
-        // Scroll Reveal
-        const reveals = document.querySelectorAll('.reveal');
-        const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
-        reveals.forEach(el => observer.observe(el));
-
-        // Widget Quote Rotation
-        const widgetQuote = document.getElementById('widgetQuote');
-        let wqIdx = 0;
-        function rotateWidgetQuote() { const q = quotes[wqIdx]; widgetQuote.style.opacity = 0; setTimeout(() => { widgetQuote.textContent = '"' + q.text + '" — ' + q.author; widgetQuote.style.opacity = 1; }, 300); wqIdx = (wqIdx + 1) % quotes.length; }
-        widgetQuote.style.transition = 'opacity 0.3s';
-        setInterval(rotateWidgetQuote, 15000);
+        document.getElementById('password').addEventListener('keyup', function (e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
     </script>
 </body>
 </html>
